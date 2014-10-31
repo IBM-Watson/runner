@@ -10,15 +10,19 @@ env:
   #########################
   ## Only add globals if you're absolutely certain they need to be globals
   ##########################
-  # console: false
+  # console: true
 
+#########################
+## set to 0 to allow
+## set to 1 to disallow as warning
+## set to 2 to disallow as error
+#########################
 rules:
-  #########################
+    #########################
   ## Optional Rules
-  ##   set to 0 to allow
   #########################
   # Disallow use of `console`
-  no-console: 1
+  no-console: 2
 
   # Disallow warning comments
   no-warning-comments:
@@ -40,9 +44,9 @@ rules:
   # Enforces one true `this` variable
   consistent-this:
     - 2
-    - _this
+    - self
   # Allows dangling underscores in identifiers
-  no-underscore-dangle: 0
+  no-underscore-dangle: 2
 
   # Enforces function expressions to have a name
   func-names: 0
@@ -100,7 +104,7 @@ rules:
   no-self-compare: 2
 
   # Prohibits use of `undefined` variable
-  no-undefined: 2
+  no-undefined: 0
 
   # Prohibits nested ternaries
   no-nested-ternary: 2
@@ -154,3 +158,5 @@ rules:
     - 2
     - always
     - propertyName: false
+      singleValue: false
+
