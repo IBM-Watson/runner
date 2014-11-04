@@ -5,3 +5,4 @@ fonts/
 images/
 js/
 vendor/
+.sass-cache/
