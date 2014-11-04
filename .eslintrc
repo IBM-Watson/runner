@@ -18,7 +18,7 @@ env:
 ## set to 2 to disallow as error
 #########################
 rules:
-    #########################
+  #########################
   ## Optional Rules
   #########################
   # Disallow use of `console`
@@ -28,10 +28,10 @@ rules:
   no-warning-comments:
     - 1
     - terms
-	- todo
-	- fixme
+        - todo
+        - fixme
       location
-	- anywhere
+        - anywhere
 
   # Warns when variables are defined but never used
   no-unused-vars: 1
