@@ -8,5 +8,5 @@ module.exports = function (gulp) {
   //////////////////////////////
   // Core Task
   //////////////////////////////
-  gulp.task('watch', ['server', 'eslint-watch']);
+  gulp.task('watch', ['eslint-watch']);
 }

@@ -37,7 +37,13 @@ module.exports = function (gulp, serverPaths) {
   //////////////////////////////
   // Core Task
   //////////////////////////////
-  gulp.task('server', function () {
+  gulp.task('broswer-sync', function () {
     return serverTask(serverPaths);
   });
+
+  //////////////////////////////
+  // Full Server Task
+  //////////////////////////////
+  gulp.task('server', ['browser-sync', 'watch']);
+  gulp.task('serve', ['server']);
 }
