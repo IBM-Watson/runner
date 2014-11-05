@@ -18,3 +18,9 @@ require('./tasks/watch')(gulp);
 // Sass Tasks
 //////////////////////////////
 require('./tasks/sass')(gulp);
+
+
+//////////////////////////////
+// Server Tasks
+//////////////////////////////
+require('./tasks/server')(gulp);
