@@ -46,14 +46,14 @@ module.exports = function (gulp, eslintPaths) {
   gulp.task('eslint-watch', function () {
     return gulp.watch(eslintPaths)
       .on('change', function (event) {
-	event.path = {
-	  absolute: event.path,
-	  relative: event.path.replace(__dirname.replace('/tasks', '') + '/', '')
-	};
+      	event.path = {
+      	  absolute: event.path,
+      	  relative: event.path.replace(__dirname.replace('/tasks', '') + '/', '')
+      	};
 
-	gutil.log('File ' + gutil.colors.magenta(event.path.relative) + ' was ' + event.type);
+      	gutil.log('File ' + gutil.colors.magenta(event.path.relative) + ' was ' + event.type);
 
-	return eslintTask(event.path.absolute);
+      	return eslintTask(event.path.absolute);
       });
   });
 }
