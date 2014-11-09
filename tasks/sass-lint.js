@@ -4,15 +4,12 @@
 // Requires
 //////////////////////////////
 var gutil = require('gulp-util'),
-    run = require('gulp-run'),
-    cache = require('gulp-cached'),
-    browserSync = require('browser-sync'),
-    reload = browserSync.reload;
+    lint = require('gulp-scss-lint');
 
 //////////////////////////////
 // Internal Vars
 //////////////////////////////
-var toSass = [
+var toSassLint = [
   'patterns/**/*.scss',
   'patterns/**/*.sass'
 ];
@@ -20,32 +17,32 @@ var toSass = [
 //////////////////////////////
 // Export
 //////////////////////////////
-module.exports = function (gulp, sassPaths) {
+module.exports = function (gulp, sassLintPaths) {
   // Set value of paths to either the default or user entered
-  sassPaths = sassPaths || toSass;
+  sassLintPaths = sassLintPaths || toSassLint;
 
   //////////////////////////////
   // Encapsulate task in function to choose path to work on
   //////////////////////////////
-  var sassTask = function (path) {
+  var sassLintTask = function (path) {
     return gulp.src(path)
-      .pipe(cache('compass'))
-      .pipe(run('bundle exec compass compile'))
-      .pipe(reload({stream: true}));
+      .pipe(lint({
+        'bundleExec': true
+      }));
   }
 
   //////////////////////////////
   // Core Task
   //////////////////////////////
-  gulp.task('sass', function () {
-    return sassTask(sassPaths);
+  gulp.task('sass-lint', function () {
+    return sassLintTask(sassLintPaths);
   });
 
   //////////////////////////////
   // Watch Task
   //////////////////////////////
-  gulp.task('sass-watch', function () {
-    return gulp.watch(sassPaths)
+  gulp.task('sass-lint-watch', function () {
+    return gulp.watch(eslintPaths)
       .on('change', function (event) {
         // Add absolute and relative (to Gulpfile) paths
         event.path = {
@@ -57,7 +54,7 @@ module.exports = function (gulp, sassPaths) {
         gutil.log('File ' + gutil.colors.magenta(event.path.relative) + ' was ' + event.type);
 
         // Call the task
-        return sassTask(event.path.absolute);
+        return sassLintTask(event.path.absolute);
       });
   });
 }
