@@ -5,6 +5,8 @@
 //////////////////////////////
 var gutil = require('gulp-util'),
     run = require('gulp-run'),
+    lint = require('gulp-scss-lint'),
+    cache = require('gulp-cached'),
     browserSync = require('browser-sync'),
     reload = browserSync.reload;
 
@@ -12,8 +14,7 @@ var gutil = require('gulp-util'),
 // Internal Vars
 //////////////////////////////
 var toSass = [
-  'patterns/**/*.scss',
-  'patterns/**/*.sass'
+  'patterns/**/*.scss'
 ];
 
 //////////////////////////////
@@ -28,8 +29,19 @@ module.exports = function (gulp, sassPaths) {
   //////////////////////////////
   var sassTask = function (path) {
     return gulp.src(path)
+      .pipe(cache('compass'))
       .pipe(run('bundle exec compass compile'))
       .pipe(reload({stream: true}));
+  }
+
+  //////////////////////////////
+  // Sass Lint
+  //////////////////////////////
+  var sassLintTask = function (path) {
+    return gulp.src(path)
+      .pipe(lint({
+        'bundleExec': true
+      }));
   }
 
   //////////////////////////////
@@ -39,23 +51,44 @@ module.exports = function (gulp, sassPaths) {
     return sassTask(sassPaths);
   });
 
+  gulp.task('sass-lint', function () {
+    return sassLintTask(sassPaths);
+  });
+
   //////////////////////////////
   // Watch Task
   //////////////////////////////
   gulp.task('sass-watch', function () {
     return gulp.watch(sassPaths)
       .on('change', function (event) {
-	// Add absolute and relative (to Gulpfile) paths
-	event.path = {
-	  absolute: event.path,
-	  relative: event.path.replace(__dirname.replace('/tasks', '') + '/', '')
-	}
+        // Add absolute and relative (to Gulpfile) paths
+        event.path = {
+          absolute: event.path,
+          relative: event.path.replace(__dirname.replace('/tasks', '') + '/', '')
+        }
 
-	// Notify user of the change
-	gutil.log('File ' + gutil.colors.magenta(event.path.relative) + ' was ' + event.type);
+        // Notify user of the change
+        gutil.log('File ' + gutil.colors.magenta(event.path.relative) + ' was ' + event.type);
 
-	// Call the task
-	return sassTask(event.path.absolute);
+        // Call the task
+        return sassTask(event.path.absolute);
       });
   });
+
+  gulp.task('sass-lint-watch', function () {
+    return gulp.watch(sassPaths)
+      .on('change', function (event) {
+        // Add absolute and relative (to Gulpfile) paths
+        event.path = {
+          absolute: event.path,
+          relative: event.path.replace(__dirname.replace('/tasks', '') + '/', '')
+        }
+
+        // Notify user of the change
+        gutil.log('File ' + gutil.colors.magenta(event.path.relative) + ' was ' + event.type);
+
+        // Call the task
+        return sassLintTask(event.path.absolute);
+      });
+  })
 }
