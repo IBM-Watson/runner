@@ -42,7 +42,7 @@ module.exports = function (gulp, sassLintPaths) {
   // Watch Task
   //////////////////////////////
   gulp.task('sass-lint-watch', function () {
-    return gulp.watch(eslintPaths)
+    return gulp.watch(sassLintPaths)
       .on('change', function (event) {
         // Add absolute and relative (to Gulpfile) paths
         event.path = {
