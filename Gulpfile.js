@@ -29,4 +29,10 @@ require('./tasks/server')(gulp);
 //////////////////////////////
 // Sass Lint Tasks
 //////////////////////////////
-require('./tasks/sass-lint')(gulp);
+require('./tasks/scsslint')(gulp);
+
+
+//////////////////////////////
+// Build Tasks
+//////////////////////////////
+require('./tasks/build')(gulp);
