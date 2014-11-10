@@ -5,6 +5,7 @@
 //////////////////////////////
 var eslint = require('gulp-eslint'),
     gutil = require('gulp-util'),
+    ifElse = require('gulp-if-else'),
     browserSync = require('browser-sync'),
     reload = browserSync.reload;
 
@@ -26,10 +27,11 @@ module.exports = function (gulp, eslintPaths) {
   //////////////////////////////
   // Encapsulate task in function to choose path to work on
   //////////////////////////////
-  var eslintTask = function (path) {
+  var eslintTask = function (path, fail) {
     return gulp.src(path)
       .pipe(eslint())
       .pipe(eslint.format())
+      .pipe(ifElse(fail === true, eslint.failOnError))
       .pipe(reload({stream: true}));
   }
 
@@ -37,7 +39,7 @@ module.exports = function (gulp, eslintPaths) {
   // Core Task
   //////////////////////////////
   gulp.task('eslint', function () {
-    return eslintTask(eslintPaths);
+    return eslintTask(eslintPaths, true);
   });
 
   //////////////////////////////
@@ -53,7 +55,7 @@ module.exports = function (gulp, eslintPaths) {
 
       	gutil.log('File ' + gutil.colors.magenta(event.path.relative) + ' was ' + event.type);
 
-      	return eslintTask(event.path.absolute);
+      	return eslintTask(event.path.absolute, false);
       });
   });
 }
