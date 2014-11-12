@@ -36,3 +36,8 @@ require('./tasks/scsslint')(gulp);
 // Build Tasks
 //////////////////////////////
 require('./tasks/build')(gulp);
+
+//////////////////////////////
+// Lint Tasks
+//////////////////////////////
+require('./tasks/lint')(gulp)

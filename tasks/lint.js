@@ -3,8 +3,7 @@
 //////////////////////////////
 // Requires
 //////////////////////////////
-var gutil = require('gulp-util'),
-    sequence = require('run-sequence');
+var gutil = require('gulp-util');
 
 //////////////////////////////
 // Export
@@ -14,16 +13,10 @@ module.exports = function (gulp) {
   //////////////////////////////
   // Core Task
   //////////////////////////////
-  gulp.task('build', function (cb) {
-    sequence(
-      // Linting
-      'lint',
+  gulp.task('lint', ['eslint', 'scsslint']);
 
-      // Compass
-      ['sass'],
-
-      // Sequence Callback
-      cb
-    );
-  });
+  //////////////////////////////
+  // Watch Task
+  //////////////////////////////
+  gulp.task('lint-watch', ['eslint-watch', 'scsslint-watch']);
 }
