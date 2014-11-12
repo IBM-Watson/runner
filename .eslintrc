@@ -141,7 +141,7 @@ rules:
   # Require brace style
   brace-style:
     - 2
-    - 1tbs
+    - stroustrup
 
   # Prohibits Yoda conditions
   yoda:
