@@ -8,6 +8,7 @@ require "breakpoint"
 require "singularitygs"
 require "toolkit"
 require "modular-scale"
+require "sass-a11y"
 
 
 # File system locations
