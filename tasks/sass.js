@@ -5,7 +5,7 @@
 //////////////////////////////
 var gutil = require('gulp-util'),
     run = require('gulp-run'),
-    plumber = require('gulp-plumber'),
+    compass = require('gulp-simple-compass'),
     cache = require('gulp-cached'),
     browserSync = require('browser-sync'),
     reload = browserSync.reload;
@@ -29,13 +29,11 @@ module.exports = function (gulp, sassPaths) {
   // Encapsulate task in function to choose path to work on
   //////////////////////////////
   var sassTask = function (path, fail) {
-    fail = (fail === true) ? false : undefined;
     return gulp.src(path)
       .pipe(cache('compass'))
-      .pipe(plumber({
-        errorHandler: fail
+      .pipe(compass({
+        failOnError: fail
       }))
-      .pipe(run('bundle exec compass compile'))
       .pipe(reload({stream: true}));
   }
 

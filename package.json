@@ -17,6 +17,7 @@
     "gulp-eslint": "^0.1.8",
     "gulp-run": "^1.6.4",
     "gulp-scss-lint": "^0.1.4",
+    "gulp-simple-compass": "^0.1.1",
     "gulp-util": "^3.0.1",
     "rimraf": "^2.2.8",
     "yamljs": "^0.2.1"
