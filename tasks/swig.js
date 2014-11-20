@@ -25,7 +25,9 @@ module.exports = function (gulp, SwigPaths) {
   //////////////////////////////
   var SwigTask = function (path) {
     return gulp.src(SwigPaths)
-      .pipe(swig())
+      .pipe(swig({
+        'template': true
+      }))
       .pipe(gulp.dest('./www/'));
   }
 
