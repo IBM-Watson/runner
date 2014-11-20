@@ -43,7 +43,7 @@ var swigPatternTag = {
     var file = '"patterns/' + args[1] + '/' + args[0] + '/' + args[0] + '.html"',
         pattern = 'pattern ' + args[0] + ' from ' + args[1];
 
-    return '_output += "<!-- {% ' + pattern + ' %} -->\\n" + _swig.compileFile(' + file + ')(_ctx) + "<!-- {% end ' + pattern + ' %} -->";\n';
+    return '_output += "\\n<!-- {% ' + pattern + ' %} -->\\n" + _swig.compileFile(' + file + ')(_ctx) + "<!-- {% end ' + pattern + ' %} -->\\n";\n';
   },
   ends: false
 }
@@ -96,7 +96,8 @@ var patternCompile = function (paths, file) {
 
 var templateCompile = function (paths, file) {
   var render = '',
-      readme = '';
+      readme = '',
+      pattern = {};
 
   if (fs.existsSync(paths.folder + '/readme.md')) {
     readme = fs.readFileSync(paths.folder + '/readme.md', 'utf8');
@@ -107,9 +108,21 @@ var templateCompile = function (paths, file) {
 
   readme = marked(readme);
 
-  console.log(readme);
+  pattern = {
+    'markup': file.contents.toString(),
+    'readme': readme
+  }
 
-  return file.contents;
+  if (file.meta.displayTemplate) {
+    render = swig.compileFile('library/templates/_' + file.meta.displayTemplate + '.html')({
+      'pattern': pattern
+    });
+  }
+  else {
+    render = pattern.markup;
+  }
+
+  return new Buffer(render);
 }
 
 
