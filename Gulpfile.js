@@ -41,3 +41,9 @@ require('./tasks/build')(gulp);
 // Lint Tasks
 //////////////////////////////
 require('./tasks/lint')(gulp)
+
+
+//////////////////////////////
+// Swig Tasks
+//////////////////////////////
+require('./tasks/swig')(gulp);
