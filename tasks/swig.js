@@ -10,7 +10,7 @@ var gutil = require('gulp-util'),
 // Internal Vars
 //////////////////////////////
 var toSwig = [
-  'patterns/**/*.html'
+  './patterns/**/*.html'
 ];
 
 //////////////////////////////

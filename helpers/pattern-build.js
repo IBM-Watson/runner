@@ -41,29 +41,9 @@ var swigPatternTag = {
   },
   compile: function (compiler, args) {
     var file = '"patterns/' + args[1] + '/' + args[0] + '/' + args[0] + '.html"',
-        from = './',
-        compileArgs = [
-          file,
-          'missing',
-          from
-        ];
+        pattern = 'pattern ' + args[0] + ' from ' + args[1];
 
-    return swigInclude(compiler, compileArgs);
-
-    // var file = '"patterns/' + args[1] + '/' + args[0] + '/' + args[0] + '.html"',
-    //   parentFile = './',
-    //   onlyIdx = -1,
-    //   onlyCtx = false,
-    //   ignore = 'missing',
-    //   w = '';
-
-    // return (ignore ? '  try {\n' : '') +
-    //   '_output += "<!-- {% pattern ' + args[0] + ' from ' + args[1] + ' %} -->\\n\"  + _swig.compileFile(' + file + ', {' +
-    //   'resolveFrom: "' + parentFile + '"' +
-    //   '})(' +
-    //   ((onlyCtx && w) ? w : (!w ? '_ctx' : '_utils.extend({}, _ctx, ' + w + ')')) +
-    //   ') + "<!-- {% end pattern ' + args[0] + ' from ' + args[1] + ' %} -->";' +
-    //   (ignore ? '} catch (e) {}' : '');
+    return '_output += "<!-- {% ' + pattern + ' %} -->\\n" + _swig.compileFile(' + file + ')(_ctx) + "<!-- {% end ' + pattern + ' %} -->";\n';
   },
   ends: false
 }
@@ -155,7 +135,8 @@ module.exports = function (options) {
     var paths = {
       absolute: file.path,
       relative: file.path.replace(process.cwd() + '/', ''),
-      folder: file.path.replace(process.cwd() + '/', '').split('/').slice(0, -1).join('/')
+      folder: file.path.replace(process.cwd() + '/', '').split('/').slice(0, -1).join('/'),
+      inner: file.path.replace(process.cwd() + '/', '').split('/').slice(1, -1).join('/')
     };
     var pattern,
         meta,
@@ -176,7 +157,7 @@ module.exports = function (options) {
       pattern = patternCompile(paths, file.contents.toString());
 
       file.contents = (options.template === true) ? templateCompile(paths, pattern) : pattern.contents;
-      gutil.log(gutil.colors.magenta(paths.relative) + ' compiled');
+      gutil.log('Pattern ' + gutil.colors.magenta(paths.inner) + ' compiled');
     }
 
     //////////////////////////////
