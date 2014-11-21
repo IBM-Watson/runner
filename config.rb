@@ -13,11 +13,11 @@ require "sass-a11y"
 
 # File system locations
 http_path = "./"
-css_dir = "css"
+css_dir = "www/css"
 sass_dir = "patterns"
-images_dir = "images"
-javascripts_dir = "js"
-fonts_dir = "fonts"
+images_dir = "www/images"
+javascripts_dir = "www/js"
+fonts_dir = "www/fonts"
 
 # You can select your preferred output style here (can be overridden via the command line): One of: :nested, :expanded, :compact, or :compressed
 output_style = :expanded
