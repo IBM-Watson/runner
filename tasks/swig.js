@@ -4,7 +4,9 @@
 // Requires
 //////////////////////////////
 var gutil = require('gulp-util'),
-    swig = require('../helpers/pattern-build');
+    swig = require('../helpers/pattern-build'),
+    browserSync = require('browser-sync'),
+    reload = browserSync.reload;
 
 //////////////////////////////
 // Internal Vars
@@ -23,12 +25,14 @@ module.exports = function (gulp, SwigPaths) {
   //////////////////////////////
   // Encapsulate task in function to choose path to work on
   //////////////////////////////
-  var SwigTask = function (path) {
+  var SwigTask = function (path, page) {
     return gulp.src(SwigPaths)
       .pipe(swig({
-        'template': true
+        'template': true,
+        'page': page === undefined ? false : page
       }))
-      .pipe(gulp.dest('./www/'));
+      .pipe(gulp.dest('./www/'))
+      .pipe(reload({stream: true}));
   }
 
   //////////////////////////////
@@ -54,7 +58,7 @@ module.exports = function (gulp, SwigPaths) {
         gutil.log('File ' + gutil.colors.magenta(event.path.relative) + ' was ' + event.type);
 
         // Call the task
-        return SwigTask(event.path.absolute);
+        return SwigTask(event.path.absolute, true);
       });
   });
 }
