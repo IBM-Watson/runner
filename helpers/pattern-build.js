@@ -110,9 +110,13 @@ var templateCompile = function (paths, file) {
 
   pattern = {
     'markup': file.contents.toString(),
-    'readme': readme
+    'readme': readme,
+    'metadata': file.meta
   }
 
+  //////////////////////////////
+  // Render the content
+  //////////////////////////////
   if (file.meta.displayTemplate) {
     render = swig.compileFile('library/templates/_' + file.meta.displayTemplate + '.html')({
       'pattern': pattern
