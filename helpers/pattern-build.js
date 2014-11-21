@@ -94,9 +94,12 @@ var patternCompile = function (paths, file) {
   };
 }
 
-var templateCompile = function (paths, file) {
+var templateCompile = function (paths, file, options) {
   var render = '',
       readme = '',
+      page = '',
+      pageTemplate = file.meta.pageTemplate ? file.meta.pageTemplate : 'library/templates/_layout.html',
+      options = options || {},
       pattern = {};
 
   if (fs.existsSync(paths.folder + '/readme.md')) {
@@ -126,6 +129,24 @@ var templateCompile = function (paths, file) {
     render = pattern.markup;
   }
 
+  if (options.page) {
+    //////////////////////////////
+    // Add the Layout
+    //////////////////////////////
+    page = '{% extends "' + pageTemplate + '" %}' + '\n' +
+          '{% block title %} | ' + file.meta.name + '{% endblock %}' + '\n' +
+          '{% block css %}{% parent %}' + '{% endblock %}' + '\n' +
+          '{% block navigation %}' + '{% endblock %}' + '\n' +
+          '{% block content %}' + render + '{% endblock %}' + '\n' +
+          '{% block javascript %}{% parent %}' + '{% endblock %}' + '\n';
+
+    render = swig.render(page, {
+      'filename': './'
+    });
+  }
+
+
+
   return new Buffer(render);
 }
 
@@ -144,6 +165,7 @@ module.exports = function (options) {
       switch (val) {
         case '--fail': options.failOnError = true; break;
         case '--template': options.template = true; break;
+        case '--page': options.page = true; break;
       }
     }
   });
@@ -170,10 +192,20 @@ module.exports = function (options) {
       return cb();
     }
 
+    //////////////////////////////
+    // Transform stuff!
+    //////////////////////////////
     if (path.extname(paths.absolute) === '.html') {
       pattern = patternCompile(paths, file.contents.toString());
 
-      file.contents = (options.template === true) ? templateCompile(paths, pattern) : pattern.contents;
+      file.contents = (options.template === true) ? templateCompile(paths, pattern, options) : pattern.contents;
+
+      if (options.page === true) {
+        file.path = paths.folder + '/index.html';
+      }
+
+
+      // Tell the user that stuff's gone down.
       gutil.log('Pattern ' + gutil.colors.magenta(paths.inner) + ' compiled');
     }
 
