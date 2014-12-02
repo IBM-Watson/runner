@@ -39,7 +39,8 @@ module.exports = function (gulp, SwigPaths) {
   // Core Task
   //////////////////////////////
   gulp.task('swig', function () {
-    return SwigTask(SwigPaths);
+    return SwigTask(SwigPaths, false);
+  });
   });
 
   //////////////////////////////

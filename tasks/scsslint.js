@@ -93,7 +93,7 @@ module.exports = function (gulp, sassLintPaths) {
         gutil.log('File ' + gutil.colors.magenta(event.path.relative) + ' was ' + event.type);
 
         // Call the task
-        return sassLintTask(event.path.absolute);
+        return sassLintTask(event.path.absolute, false);
       });
   });
 }
