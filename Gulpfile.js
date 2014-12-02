@@ -47,3 +47,9 @@ require('./tasks/lint')(gulp)
 // Swig Tasks
 //////////////////////////////
 require('./tasks/swig')(gulp);
+
+
+//////////////////////////////
+// CSS Tasks
+//////////////////////////////
+require('./tasks/css')(gulp);
