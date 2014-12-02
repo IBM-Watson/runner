@@ -30,8 +30,6 @@ module.exports = function (gulp, serverPaths) {
         baseDir: path
       }
     });
-    // return gulp.src(serverPaths)
-    //   .pipe(reload({stream: true}));
   }
 
   //////////////////////////////
