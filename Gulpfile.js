@@ -53,3 +53,9 @@ require('./tasks/swig')(gulp);
 // CSS Tasks
 //////////////////////////////
 require('./tasks/css')(gulp);
+
+
+//////////////////////////////
+// Clean Tasks
+//////////////////////////////
+require('./tasks/clean')(gulp);
