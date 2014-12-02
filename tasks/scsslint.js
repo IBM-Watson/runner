@@ -80,7 +80,7 @@ module.exports = function (gulp, sassLintPaths) {
   //////////////////////////////
   // Watch Task
   //////////////////////////////
-  gulp.task('scsslint-watch', function () {
+  gulp.task('scsslint:watch', function () {
     return gulp.watch(sassLintPaths)
       .on('change', function (event) {
         // Add absolute and relative (to Gulpfile) paths

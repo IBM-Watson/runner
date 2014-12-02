@@ -18,5 +18,5 @@ module.exports = function (gulp) {
   //////////////////////////////
   // Watch Task
   //////////////////////////////
-  gulp.task('lint-watch', ['eslint-watch', 'scsslint-watch']);
+  gulp.task('lint:watch', ['eslint:watch', 'scsslint:watch']);
 }

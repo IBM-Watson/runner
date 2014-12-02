@@ -43,7 +43,7 @@ module.exports = function (gulp, CssPaths) {
   //////////////////////////////
   // Watch Task
   //////////////////////////////
-  gulp.task('css-watch', function () {
+  gulp.task('css:watch', function () {
     return gulp.watch(CssPaths)
       .on('change', function (event) {
         // Add absolute and relative (to Gulpfile) paths

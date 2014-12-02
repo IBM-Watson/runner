@@ -45,7 +45,7 @@ module.exports = function (gulp, SwigPaths) {
   //////////////////////////////
   // Watch Task
   //////////////////////////////
-  gulp.task('swig-watch', function () {
+  gulp.task('swig:watch', function () {
     return gulp.watch(SwigPaths)
       .on('change', function (event) {
         // Add absolute and relative (to Gulpfile) paths

@@ -47,7 +47,7 @@ module.exports = function (gulp, sassPaths) {
   //////////////////////////////
   // Watch Task
   //////////////////////////////
-  gulp.task('sass-watch', function () {
+  gulp.task('sass:watch', function () {
     return gulp.watch(sassPaths)
       .on('change', function (event) {
         // Add absolute and relative (to Gulpfile) paths

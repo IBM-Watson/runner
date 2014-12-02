@@ -45,7 +45,7 @@ module.exports = function (gulp, eslintPaths) {
   //////////////////////////////
   // Watch Task
   //////////////////////////////
-  gulp.task('eslint-watch', function () {
+  gulp.task('eslint:watch', function () {
     return gulp.watch(eslintPaths)
       .on('change', function (event) {
       	event.path = {
