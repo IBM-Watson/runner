@@ -15,12 +15,20 @@ module.exports = function (gulp) {
   // Core Task
   //////////////////////////////
   gulp.task('build', function (cb) {
-    sequence(
+    return sequence(
       // Linting
       'lint',
 
-      // Compass
-      ['sass'],
+      // Pre-Compiled Files
+      ['sass', 'swig'],
+
+      // Post-Compiled Files
+      ['css'],
+
+      // Sequence Callback
+      cb
+    );
+  });
 
       // Sequence Callback
       cb
