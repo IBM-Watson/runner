@@ -59,3 +59,9 @@ require('./tasks/css')(gulp);
 // Clean Tasks
 //////////////////////////////
 require('./tasks/clean')(gulp);
+
+
+//////////////////////////////
+// Refresh Tasks
+//////////////////////////////
+require('./tasks/refresh')(gulp);
