@@ -97,9 +97,10 @@ var patternCompile = function (paths, file) {
 var templateCompile = function (paths, file, options) {
   var render = '',
       readme = '',
-      page = '',
-      pageTemplate = file.meta.pageTemplate ? file.meta.pageTemplate : 'library/templates/_layout.html',
+      templatePath = 'library/templates/',
+      pageTemplate = file.meta.pageTemplate ? file.meta.pageTemplate : templatePath + '_layout.html',
       options = options || {},
+      layout = {},
       pattern = {};
 
   if (fs.existsSync(paths.folder + '/readme.md')) {
@@ -115,13 +116,13 @@ var templateCompile = function (paths, file, options) {
     'markup': file.contents.toString(),
     'readme': readme,
     'metadata': file.meta
-  }
+  };
 
   //////////////////////////////
   // Render the content
   //////////////////////////////
   if (file.meta.displayTemplate) {
-    render = swig.compileFile('library/templates/_' + file.meta.displayTemplate + '.html')({
+    render = swig.compileFile(templatePath + '_' + file.meta.displayTemplate + '.html')({
       'pattern': pattern
     });
   }
@@ -133,15 +134,13 @@ var templateCompile = function (paths, file, options) {
     //////////////////////////////
     // Add the Layout
     //////////////////////////////
-    page = '{% extends "' + pageTemplate + '" %}' + '\n' +
-          '{% block title %} | ' + file.meta.name + '{% endblock %}' + '\n' +
-          '{% block css %}{% parent %}' + '{% endblock %}' + '\n' +
-          '{% block navigation %}' + '{% endblock %}' + '\n' +
-          '{% block content %}' + render + '{% endblock %}' + '\n' +
-          '{% block javascript %}{% parent %}' + '{% endblock %}' + '\n';
+    layout = {
+      'title': ' | ' + file.meta.name,
+      'content': render
+    };
 
-    render = swig.render(page, {
-      'filename': './'
+    render = swig.compileFile(pageTemplate)({
+      'layout': layout
     });
   }
 
@@ -179,7 +178,8 @@ module.exports = function (options) {
     };
     var pattern,
         meta,
-        readme;
+        readme,
+        fileContents;
 
     //////////////////////////////
     // Deal with errors and such
@@ -196,7 +196,9 @@ module.exports = function (options) {
     // Transform stuff!
     //////////////////////////////
     if (path.extname(paths.absolute) === '.html') {
-      pattern = patternCompile(paths, file.contents.toString());
+      fileContents = fs.readFileSync(paths.relative, 'utf8');
+
+      pattern = patternCompile(paths, fileContents);
 
       file.contents = (options.template === true) ? templateCompile(paths, pattern, options) : pattern.contents;
 
