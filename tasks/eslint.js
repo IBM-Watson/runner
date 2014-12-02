@@ -43,6 +43,13 @@ module.exports = function (gulp, eslintPaths) {
   });
 
   //////////////////////////////
+  // Server Initialization Task
+  //////////////////////////////
+  gulp.task('eslint:server', function () {
+    return eslintTask(eslintPaths, false);
+  });
+
+  //////////////////////////////
   // Watch Task
   //////////////////////////////
   gulp.task('eslint:watch', function () {

@@ -78,6 +78,13 @@ module.exports = function (gulp, sassLintPaths) {
   });
 
   //////////////////////////////
+  // Server Initialization Task
+  //////////////////////////////
+  gulp.task('scsslint:server', function () {
+    return sassLintTask(sassLintPaths, false);
+  });
+
+  //////////////////////////////
   // Watch Task
   //////////////////////////////
   gulp.task('scsslint:watch', function () {

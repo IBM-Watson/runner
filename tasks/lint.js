@@ -16,6 +16,11 @@ module.exports = function (gulp) {
   gulp.task('lint', ['eslint', 'scsslint']);
 
   //////////////////////////////
+  // Server Initialization Task
+  //////////////////////////////
+  gulp.task('lint:server', ['eslint:server', 'scsslint:server']);
+
+  //////////////////////////////
   // Watch Task
   //////////////////////////////
   gulp.task('lint:watch', ['eslint:watch', 'scsslint:watch']);

@@ -41,6 +41,12 @@ module.exports = function (gulp, SwigPaths) {
   gulp.task('swig', function () {
     return SwigTask(SwigPaths, false);
   });
+
+  //////////////////////////////
+  // Server Initialization Task
+  //////////////////////////////
+  gulp.task('swig:server', function () {
+    return SwigTask(SwigPaths, true);
   });
 
   //////////////////////////////

@@ -45,6 +45,13 @@ module.exports = function (gulp, sassPaths) {
   });
 
   //////////////////////////////
+  // Server Initialization Task
+  //////////////////////////////
+  gulp.task('sass:server', function () {
+    return sassTask(sassPaths, false);
+  });
+
+  //////////////////////////////
   // Watch Task
   //////////////////////////////
   gulp.task('sass:watch', function () {

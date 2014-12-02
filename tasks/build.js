@@ -30,6 +30,20 @@ module.exports = function (gulp) {
     );
   });
 
+  //////////////////////////////
+  // Server Initialization Task
+  //////////////////////////////
+  gulp.task('build:server', function (cb) {
+    return sequence(
+      // Linting
+      'lint:server',
+
+      // Pre-Compiled Files
+      ['sass:server', 'swig:server'],
+
+      // Post-Compiled Files
+      ['css'],
+
       // Sequence Callback
       cb
     );
