@@ -297,7 +297,7 @@ linters:
 
   # It is good practice to choose a convention for naming selectors.
   SelectorFormat:
-    enabled: true
+    enabled: false
     severity: error
     convention: BEM
 
