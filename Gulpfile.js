@@ -70,3 +70,9 @@ require('./tasks/clean')(gulp);
 // Refresh Tasks
 //////////////////////////////
 require('./tasks/refresh')(gulp);
+
+
+//////////////////////////////
+// Copy Tasks
+//////////////////////////////
+require('./tasks/copy')(gulp);
