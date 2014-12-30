@@ -6,6 +6,7 @@
 var gutil = require('gulp-util'),
     swig = require('../helpers/pattern-build'),
     browserSync = require('browser-sync'),
+    dest = require('../helpers/relative-dest'),
     reload = browserSync.reload;
 
 //////////////////////////////
@@ -26,12 +27,12 @@ module.exports = function (gulp, SwigPaths) {
   // Encapsulate task in function to choose path to work on
   //////////////////////////////
   var SwigTask = function (path, page) {
-    return gulp.src(SwigPaths)
+    return gulp.src(path)
       .pipe(swig({
         'template': true,
         'page': page === undefined ? false : page
       }))
-      .pipe(gulp.dest('./www/'))
+      .pipe(dest('./www/'))
       .pipe(reload({stream: true}));
   }
 
@@ -47,6 +48,34 @@ module.exports = function (gulp, SwigPaths) {
   //////////////////////////////
   gulp.task('swig:server', function () {
     return SwigTask(SwigPaths, true);
+  });
+
+  gulp.task('swig:metadata:watch', function () {
+    return gulp.watch([
+        './patterns/**/*.md',
+        './patterns/**/pattern.yml'
+      ])
+      .on('change', function (event) {
+        var html;
+
+        // Add absolute and relative (to Gulpfile) paths
+        event.path = {
+          absolute: event.path,
+          relative: event.path.replace(__dirname.replace('/tasks', '') + '/', '')
+        }
+
+        // Build HTML path from Markdown path
+        html = event.path.absolute.split('/');
+        html.pop();
+        html.push(html[html.length - 1] + '.html');
+        html = html.join('/');
+
+        // Notify user of the change
+        gutil.log('File ' + gutil.colors.magenta(event.path.relative) + ' was ' + event.type);
+
+        // Call the task
+        return SwigTask(html, true);
+      });
   });
 
   //////////////////////////////

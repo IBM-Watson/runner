@@ -59,6 +59,7 @@ module.exports = function (path, options) {
       if (err) {
         self.emit('error', new PluginError(PLUGIN_NAME, err.toString()));
       }
+      self.push(file);
       return cb();
     });
   })

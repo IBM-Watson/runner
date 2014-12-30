@@ -144,8 +144,6 @@ var templateCompile = function (paths, file, options) {
     });
   }
 
-
-
   return new Buffer(render);
 }
 
