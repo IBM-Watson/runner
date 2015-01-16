@@ -10,7 +10,7 @@ var through = require('through2'),
     yaml = require('js-yaml'),
     path = require('path'),
     fs = require('fs-extra'),
-    marked = require('marked'),
+    marked = require('./markdown'),
     PluginError = gutil.PluginError,
     PLUGIN_NAME = 'pattern-build';
 
@@ -54,21 +54,6 @@ swig.setTag(
   swigPatternTag.compile,
   swigPatternTag.ends
 );
-
-//////////////////////////////
-// Marked Options
-//////////////////////////////
-marked.setOptions({
-  renderer: new marked.Renderer(),
-  gfm: true,
-  tables: true,
-  breaks: true,
-  pedantic: false,
-  sanitize: true,
-  smartLists: false,
-  smartypants: true,
-  langPrefix: 'language-'
-});
 
 //////////////////////////////
 // Compiling
