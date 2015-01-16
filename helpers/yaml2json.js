@@ -36,7 +36,7 @@ module.exports = function (options) {
   //////////////////////////////
   // Through Object
   //////////////////////////////
-  var compile = through.obj(function (file, encoding, cb) {
+  var stream = through.obj(function (file, encoding, cb) {
     var ext = path.extname(file.path).toLowerCase(),
         contents = '';
 
@@ -60,12 +60,16 @@ module.exports = function (options) {
       file.path = gutil.replaceExtension(file.path, '.json');
     }
 
+    //////////////////////////////
+    // Push the file back to the stream!
+    //////////////////////////////
+    this.push(file);
 
     //////////////////////////////
-    // Return Callback
+    // Callback to tell us we're done
     //////////////////////////////
-    return cb();
+    cb();
   })
 
-  return compile;
+  return stream;
 }
