@@ -4,7 +4,6 @@
 // Requires
 //////////////////////////////
 var gutil = require('gulp-util'),
-    run = require('gulp-run'),
     compass = require('gulp-simple-compass'),
     cache = require('gulp-cached'),
     browserSync = require('browser-sync'),
