@@ -27,11 +27,12 @@ module.exports = function (gulp, sassPaths) {
   //////////////////////////////
   // Encapsulate task in function to choose path to work on
   //////////////////////////////
-  var sassTask = function (path, fail) {
+  var sassTask = function (path, fail, watch) {
     return gulp.src(path)
       .pipe(cache('compass'))
       .pipe(compass({
-        failOnError: fail
+        'failOnError': fail,
+        'watch': watch
       }))
       .pipe(reload({stream: true}));
   }
@@ -40,14 +41,14 @@ module.exports = function (gulp, sassPaths) {
   // Core Task
   //////////////////////////////
   gulp.task('sass', function () {
-    return sassTask(sassPaths, true);
+    return sassTask(sassPaths, true, false);
   });
 
   //////////////////////////////
   // Server Initialization Task
   //////////////////////////////
   gulp.task('sass:server', function () {
-    return sassTask(sassPaths, false);
+    return sassTask(sassPaths, false, false);
   });
 
   //////////////////////////////
@@ -66,7 +67,7 @@ module.exports = function (gulp, sassPaths) {
         gutil.log('File ' + gutil.colors.magenta(event.path.relative) + ' was ' + event.type);
 
         // Call the task
-        return sassTask(event.path.absolute, false);
+        return sassTask(event.path.absolute, false, true);
       });
   });
 }
