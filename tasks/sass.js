@@ -4,10 +4,8 @@
 // Requires
 //////////////////////////////
 var gutil = require('gulp-util'),
-    compass = require('gulp-simple-compass'),
-    cache = require('gulp-cached'),
-    browserSync = require('browser-sync'),
-    reload = browserSync.reload;
+    sass = require('gulp-sass'),
+    dest = require('../helpers/relative-dest');
 
 //////////////////////////////
 // Internal Vars
@@ -29,12 +27,8 @@ module.exports = function (gulp, sassPaths) {
   //////////////////////////////
   var sassTask = function (path, fail, watch) {
     return gulp.src(path)
-      .pipe(cache('compass'))
-      .pipe(compass({
-        'failOnError': fail,
-        'watch': watch
-      }))
-      .pipe(reload({stream: true}));
+      .pipe(sass())
+      .pipe(dest('./www/css/'));
   }
 
   //////////////////////////////
