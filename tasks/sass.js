@@ -4,10 +4,8 @@
 // Requires
 //////////////////////////////
 var gutil = require('gulp-util'),
-    compass = require('gulp-simple-compass'),
-    cache = require('gulp-cached'),
-    browserSync = require('browser-sync'),
-    reload = browserSync.reload;
+    sass = require('gulp-sass'),
+    dest = require('../helpers/relative-dest');
 
 //////////////////////////////
 // Internal Vars
@@ -29,26 +27,38 @@ module.exports = function (gulp, sassPaths) {
   //////////////////////////////
   var sassTask = function (path, fail, watch) {
     return gulp.src(path)
-      .pipe(cache('compass'))
-      .pipe(compass({
-        'failOnError': fail,
-        'watch': watch
+      .pipe(sass({
+        'errLogToConsole': fail,
+        'onSuccess': function (css) {
+          var time = css.stats.end - css.stats.start,
+              file = css.stats.entry.replace(__dirname.replace('/tasks', '') + '/', '');
+
+          if (time > 1000) {
+            time = (time / 1000).toFixed(2);
+            time += ' s';
+          }
+          else {
+            time += 'ms';
+          }
+
+          gutil.log('Compiled ' + gutil.colors.magenta(file) + ' in ' + gutil.colors.magenta(time));
+        }
       }))
-      .pipe(reload({stream: true}));
-  }
+      .pipe(dest('./www/css/'));
+  };
 
   //////////////////////////////
   // Core Task
   //////////////////////////////
   gulp.task('sass', function () {
-    return sassTask(sassPaths, true, false);
+    return sassTask(sassPaths, false);
   });
 
   //////////////////////////////
   // Server Initialization Task
   //////////////////////////////
   gulp.task('sass:server', function () {
-    return sassTask(sassPaths, false, false);
+    return sassTask(sassPaths, true);
   });
 
   //////////////////////////////
@@ -67,7 +77,7 @@ module.exports = function (gulp, sassPaths) {
         gutil.log('File ' + gutil.colors.magenta(event.path.relative) + ' was ' + event.type);
 
         // Call the task
-        return sassTask(event.path.absolute, false, true);
+        return sassTask(process.cwd() + '/patterns/crick.scss', true);
       });
   });
 }
