@@ -33,7 +33,15 @@ module.exports = function (gulp, sassPaths) {
           var time = css.stats.end - css.stats.start,
               file = css.stats.entry.replace(__dirname.replace('/tasks', '') + '/', '');
 
-          gutil.log('Compiled ' + gutil.colors.magenta(file) + ' in ' + gutil.colors.magenta(time + ' ms'));
+          if (time > 1000) {
+            time = (time / 1000).toFixed(2);
+            time += ' s';
+          }
+          else {
+            time += 'ms';
+          }
+
+          gutil.log('Compiled ' + gutil.colors.magenta(file) + ' in ' + gutil.colors.magenta(time));
         }
       }))
       .pipe(dest('./www/css/'));
