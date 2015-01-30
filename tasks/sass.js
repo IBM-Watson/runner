@@ -27,22 +27,30 @@ module.exports = function (gulp, sassPaths) {
   //////////////////////////////
   var sassTask = function (path, fail, watch) {
     return gulp.src(path)
-      .pipe(sass())
+      .pipe(sass({
+        'errLogToConsole': fail,
+        'onSuccess': function (css) {
+          var time = css.stats.end - css.stats.start,
+              file = css.stats.entry.replace(__dirname.replace('/tasks', '') + '/', '');
+
+          gutil.log('Compiled ' + gutil.colors.magenta(file) + ' in ' + gutil.colors.magenta(time + ' ms'));
+        }
+      }))
       .pipe(dest('./www/css/'));
-  }
+  };
 
   //////////////////////////////
   // Core Task
   //////////////////////////////
   gulp.task('sass', function () {
-    return sassTask(sassPaths, true, false);
+    return sassTask(sassPaths, false);
   });
 
   //////////////////////////////
   // Server Initialization Task
   //////////////////////////////
   gulp.task('sass:server', function () {
-    return sassTask(sassPaths, false, false);
+    return sassTask(sassPaths, true);
   });
 
   //////////////////////////////
@@ -61,7 +69,7 @@ module.exports = function (gulp, sassPaths) {
         gutil.log('File ' + gutil.colors.magenta(event.path.relative) + ' was ' + event.type);
 
         // Call the task
-        return sassTask(event.path.absolute, false, true);
+        return sassTask(process.cwd() + '/patterns/crick.scss', true);
       });
   });
 }
