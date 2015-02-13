@@ -76,3 +76,8 @@ require('./tasks/refresh')(gulp);
 // Copy Tasks
 //////////////////////////////
 require('./tasks/copy')(gulp);
+
+//////////////////////////////
+// Library Tasks
+//////////////////////////////
+require('./tasks/library')(gulp);
