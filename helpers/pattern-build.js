@@ -86,6 +86,10 @@ var templateCompile = function (paths, file, options) {
       'layout': layout
     });
   }
+  else {
+    // console.log(render);
+    render = '---\n' + yaml.safeDump(file.meta) + '---\n' + render;
+  }
 
   return new Buffer(render);
 }

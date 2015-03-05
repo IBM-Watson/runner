@@ -81,3 +81,9 @@ require('./tasks/copy')(gulp);
 // Library Tasks
 //////////////////////////////
 require('./tasks/library')(gulp);
+
+
+//////////////////////////////
+// Page Build Tasks
+//////////////////////////////
+require('./tasks/page-build')(gulp);

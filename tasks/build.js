@@ -23,7 +23,7 @@ module.exports = function (gulp) {
       ['sass', 'swig'],
 
       // Post-Compiled Files
-      ['css'],
+      ['css', 'page-build'],
 
       // Sequence Callback
       cb
@@ -42,7 +42,7 @@ module.exports = function (gulp) {
       ['sass:server', 'swig:server'],
 
       // Post-Compiled Files
-      ['css'],
+      ['css', 'page-build'],
 
       // Sequence Callback
       cb
