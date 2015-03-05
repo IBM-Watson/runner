@@ -30,10 +30,10 @@ module.exports = function (gulp, SwigPaths) {
     return gulp.src(path)
       .pipe(swig({
         'template': true,
-        'page': page === undefined ? false : page
+        'page': false
       }))
-      .pipe(dest('./www/'))
-      .pipe(reload({stream: true}));
+      .pipe(dest('./tmp/'));
+      // .pipe(reload({stream: true}));
   }
 
   //////////////////////////////

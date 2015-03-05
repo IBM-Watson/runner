@@ -8,4 +8,5 @@ fonts/
 images/
 js/
 vendor/
+tmp/
 .sass-cache/

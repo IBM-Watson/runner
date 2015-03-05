@@ -16,7 +16,8 @@ module.exports = function (gulp) {
   gulp.task('clean:server', function (cb) {
     return clean([
       'www/**/*',
-      '!www/.gitkeep'
+      '!www/.gitkeep',
+      'tmp/'
     ], cb);
   });
 }
