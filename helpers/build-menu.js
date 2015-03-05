@@ -70,7 +70,9 @@ var buildMenuJSON = function (directory, extensions, all, cb) {
 
 
         // if (pattern.group === '') {
+        if (folderHolder[pattern.section] && folderHolder[pattern.section].submenu) {
           folderHolder[pattern.section].submenu.push(item);
+        }
         // }
         // else {
         //   folderHolder[pattern.section + '-' + pattern.group].submenu.push(item);

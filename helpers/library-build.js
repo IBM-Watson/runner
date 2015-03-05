@@ -14,6 +14,7 @@ var through = require('through2'),
     fs = require('fs-extra'),
     marked = require('./markdown'),
     swig = require('./swig'),
+    yaml = require('js-yaml'),
     PluginError = gutil.PluginError,
     PLUGIN_NAME = 'library-build';
 
@@ -35,21 +36,9 @@ module.exports = function (options) {
   });
 
   var templateCompile = function (file) {
-    var content = marked(file.contents.toString()),
-        meta = file.meta,
-        templatePath = 'library/templates/',
-        pageTemplate = meta.pageTemplate ? meta.pageTemplate : templatePath + '_layout.html',
-        render = '',
-        layout;
+    var render = marked(file.contents.toString());
 
-    layout = {
-      'title': meta.title ? ' | ' + meta.title : '',
-      'content': content
-    };
-
-    render = swig.compileFile(pageTemplate)({
-      'layout': layout
-    });
+    render = '---\n' + yaml.safeDump(file.meta) + '---\n' + '<div class="base--STYLED">\n' + render + '</div>';
 
     return new Buffer(render);
   }

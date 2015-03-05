@@ -20,7 +20,7 @@ module.exports = function (gulp) {
       'lint',
 
       // Pre-Compiled Files
-      ['sass', 'swig'],
+      ['sass', 'swig', 'library'],
 
       // Post-Compiled Files
       ['css', 'page-build'],
@@ -39,7 +39,7 @@ module.exports = function (gulp) {
       'lint:server',
 
       // Pre-Compiled Files
-      ['sass:server', 'swig:server'],
+      ['sass:server', 'swig:server', 'library'],
 
       // Post-Compiled Files
       ['css', 'page-build'],

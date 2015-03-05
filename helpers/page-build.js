@@ -39,6 +39,7 @@ var buildFiles = function buildFiles (nav) {
         templatePath = 'library/templates/',
         pageTemplate = content.attributes.pageTemplate ? content.attributes.pageTemplate : templatePath + '_layout.html',
         layout,
+        title,
         render;
 
     // Build the relative path
@@ -51,7 +52,7 @@ var buildFiles = function buildFiles (nav) {
     content.path = pFinal + '/index.html';
 
     layout = {
-      'title': ' | ' + content.attributes.name,
+      'title': content.attributes.name ? ' | ' + content.attributes.name : '',
       'content': content.body,
       'heading': {
         'navigation': nav

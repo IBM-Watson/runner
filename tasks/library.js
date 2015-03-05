@@ -31,7 +31,7 @@ module.exports = function (gulp, LibraryPaths) {
   var LibraryTask = function (path) {
     return gulp.src(LibraryPaths)
       .pipe(front({ property: 'meta' }))
-      // .pipe(swig())
+      .pipe(swig())
       .pipe(dest('./tmp/'));
       // .pipe(reload({stream: true}));
   }
