@@ -24,46 +24,52 @@ var through = require('through2'),
 //////////////////////////////
 // Walk ALL the things!
 //////////////////////////////
-var buildFiles = function buildFiles (nav) {
+var buildFiles = function buildFiles (nav, cb) {
   var walked = walker.transformSync({
     root: process.cwd() + '/tmp/',
     rules: {
       '**/*.html': '$1'
     }
-  });
+  }),
+  counter = 0;
 
   walked.forEach(function (file) {
-    // Grab the contents of the file
-    var readFile = fs.readFileSync(file.path, 'utf-8'),
-        content = fm(readFile),
+    fs.readFile(file.path, 'utf-8', function (err, data) {
+      var content = fm(data),
         templatePath = 'library/templates/',
         pageTemplate = content.attributes.pageTemplate ? content.attributes.pageTemplate : templatePath + '_layout.html',
         layout,
         title,
         render;
 
-    // Build the relative path
-    var path = file.relative.split('/'),
-        pFinal = '',
-        pHolder = '';
-    path.pop();
-    path.shift();
-    pFinal = path.join('/');
-    content.path = pFinal + '/index.html';
+      // Build the relative path
+      var path = file.relative.split('/'),
+          pFinal = '',
+          pHolder = '';
+      path.pop();
+      path.shift();
+      pFinal = path.join('/');
+      content.path = pFinal + '/index.html';
 
-    layout = {
-      'title': content.attributes.name ? ' | ' + content.attributes.name : '',
-      'content': content.body,
-      'heading': {
-        'navigation': nav
-      }
-    };
+      layout = {
+        'title': content.attributes.name ? ' | ' + content.attributes.name : '',
+        'content': content.body,
+        'heading': {
+          'navigation': nav
+        }
+      };
 
-    render = swig.compileFile(pageTemplate)({
-      'layout': layout
+      render = swig.compileFile(pageTemplate)({
+        'layout': layout
+      });
+
+      fs.outputFile(process.cwd() + '/www/' + content.path, render, function (err) {
+        counter++;
+        if (counter === walked.length) {
+          cb();
+        }
+      });
     });
-
-    fs.outputFileSync(process.cwd() + '/www/' + content.path, render);
   });
 
   return 'done';
@@ -141,13 +147,13 @@ module.exports = function (options, cb) {
   buildMenuJSON(process.cwd() + '/tmp', ['.html'], true, function (menu) {
     menu = buildNav(menu);
 
-    var files = buildFiles(menu);
-
-    var end = time.now(),
+    var files = buildFiles(menu, function () {
+      var end = time.now(),
         total = Math.round((end - start) / 1000);
 
-    gutil.log('Library rebuilt after ' + gutil.colors.magenta(total + 'ms'));
-    cb();
+      gutil.log('Library rebuilt after ' + gutil.colors.magenta(total + 'ms'));
+      cb();
+    });
   });
 
   // var found = findStuff();
