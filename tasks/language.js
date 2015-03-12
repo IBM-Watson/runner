@@ -14,8 +14,8 @@ var gutil = require('gulp-util'),
 // Internal Vars
 //////////////////////////////
 var toLibrary = [
-  'library/**/*.md',
-  '!library/bower_components/**/*'
+  'language/**/*.md',
+  '!language/bower_components/**/*'
 ];
 
 //////////////////////////////
@@ -39,14 +39,14 @@ module.exports = function (gulp, LibraryPaths) {
   //////////////////////////////
   // Core Task
   //////////////////////////////
-  gulp.task('library', function () {
+  gulp.task('language', function () {
     return LibraryTask(LibraryPaths);
   });
 
   //////////////////////////////
   // Watch Task
   //////////////////////////////
-  gulp.task('library:watch', function () {
+  gulp.task('language:watch', function () {
     return gulp.watch(LibraryPaths)
       .on('change', function (event) {
         // Add absolute and relative (to Gulpfile) paths
