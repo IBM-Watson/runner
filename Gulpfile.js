@@ -78,9 +78,9 @@ require('./tasks/refresh')(gulp);
 require('./tasks/copy')(gulp);
 
 //////////////////////////////
-// Library Tasks
+// Language Tasks
 //////////////////////////////
-require('./tasks/library')(gulp);
+require('./tasks/language')(gulp);
 
 
 //////////////////////////////
