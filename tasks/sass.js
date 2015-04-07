@@ -5,6 +5,7 @@
 //////////////////////////////
 var gutil = require('gulp-util'),
     sass = require('gulp-sass'),
+    importOnce = require('node-sass-import-once'),
     dest = require('../helpers/relative-dest');
 
 //////////////////////////////
@@ -28,22 +29,13 @@ module.exports = function (gulp, sassPaths) {
   var sassTask = function (path, fail, watch) {
     return gulp.src(path)
       .pipe(sass({
-        'errLogToConsole': fail,
-        'onSuccess': function (css) {
-          var time = css.stats.end - css.stats.start,
-              file = css.stats.entry.replace(__dirname.replace('/tasks', '') + '/', '');
-
-          if (time > 1000) {
-            time = (time / 1000).toFixed(2);
-            time += ' s';
-          }
-          else {
-            time += 'ms';
-          }
-
-          gutil.log('Compiled ' + gutil.colors.magenta(file) + ' in ' + gutil.colors.magenta(time));
+        'importer': importOnce,
+        'importOnce': {
+          'index': true,
+          'css': true,
+          'bower': true
         }
-      }))
+      }).on('error', sass.logError))
       .pipe(dest('./www/css/'));
   };
 
