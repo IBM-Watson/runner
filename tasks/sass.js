@@ -32,7 +32,7 @@ module.exports = function (gulp, sassPaths) {
         'importer': importOnce,
         'importOnce': {
           'index': true,
-          'css': true,
+          'css': false,
           'bower': true
         }
       }).on('error', sass.logError))
