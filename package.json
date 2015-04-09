@@ -17,8 +17,10 @@
     "gulp": "^3.8.10",
     "gulp-css-target": "^0.1.0",
     "gulp-eslint": "^0.1.8",
+    "gulp-imagemin": "^2.2.1",
     "gulp-sass": "^2.0.0-alpha.1",
     "gulp-scss-lint": "^0.1.4",
+    "imagemin-pngquant": "^4.0.0",
     "node-sass-import-once": "^1.1.0",
     "run-sequence": "^1.0.1"
   },

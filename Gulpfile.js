@@ -87,3 +87,9 @@ require('./tasks/language')(gulp);
 // Page Build Tasks
 //////////////////////////////
 require('./tasks/page-build')(gulp);
+
+
+//////////////////////////////
+// imagemin Tasks
+//////////////////////////////
+require('./tasks/imagemin')(gulp);
