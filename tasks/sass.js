@@ -5,6 +5,7 @@
 //////////////////////////////
 var gutil = require('gulp-util'),
     sass = require('gulp-sass'),
+    ifElse = require('gulp-if-else'),
     importOnce = require('node-sass-import-once'),
     dest = require('../helpers/relative-dest');
 
@@ -16,6 +17,15 @@ var toSass = [
   'patterns/**/*.sass'
 ];
 
+var sassSettings = {
+  'importer': importOnce,
+  'importOnce': {
+    'index': true,
+    'css': false,
+    'bower': true
+  }
+};
+
 //////////////////////////////
 // Export
 //////////////////////////////
@@ -26,16 +36,9 @@ module.exports = function (gulp, sassPaths) {
   //////////////////////////////
   // Encapsulate task in function to choose path to work on
   //////////////////////////////
-  var sassTask = function (path, fail, watch) {
+  var sassTask = function (path) {
     return gulp.src(path)
-      .pipe(sass({
-        'importer': importOnce,
-        'importOnce': {
-          'index': true,
-          'css': false,
-          'bower': true
-        }
-      }).on('error', sass.logError))
+      .pipe(sass(sassSettings).on('error', sass.logError))
       .pipe(dest('./www/css/'));
   };
 
@@ -43,14 +46,16 @@ module.exports = function (gulp, sassPaths) {
   // Core Task
   //////////////////////////////
   gulp.task('sass', function () {
-    return sassTask(sassPaths, false);
+    return gulp.src(sassPaths)
+      .pipe(sass(sassSettings))
+      .pipe(dest('./www/css/'));
   });
 
   //////////////////////////////
   // Server Initialization Task
   //////////////////////////////
   gulp.task('sass:server', function () {
-    return sassTask(sassPaths, true);
+    return sassTask(sassPaths);
   });
 
   //////////////////////////////
@@ -69,7 +74,7 @@ module.exports = function (gulp, sassPaths) {
         gutil.log('File ' + gutil.colors.magenta(event.path.relative) + ' was ' + event.type);
 
         // Call the task
-        return sassTask(process.cwd() + '/patterns/crick.scss', true);
+        return sassTask(process.cwd() + '/patterns/crick.scss');
       });
   });
 }
