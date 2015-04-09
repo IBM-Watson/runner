@@ -13,15 +13,15 @@ module.exports = function (gulp) {
   //////////////////////////////
   // Core Task
   //////////////////////////////
-  gulp.task('lint', ['eslint', 'scsslint']);
+  gulp.task('lint', ['eslint']);
 
   //////////////////////////////
   // Server Initialization Task
   //////////////////////////////
-  gulp.task('lint:server', ['eslint:server', 'scsslint:server']);
+  gulp.task('lint:server', ['eslint:server']);
 
   //////////////////////////////
   // Watch Task
   //////////////////////////////
-  gulp.task('lint:watch', ['eslint:watch', 'scsslint:watch']);
+  gulp.task('lint:watch', ['eslint:watch']);
 }
