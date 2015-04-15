@@ -5,6 +5,7 @@
 //////////////////////////////
 var gutil = require('gulp-util'),
     sass = require('gulp-sass'),
+    fs = require('fs-extra'),
     ifElse = require('gulp-if-else'),
     importOnce = require('node-sass-import-once'),
     dest = require('../helpers/relative-dest');
@@ -32,6 +33,23 @@ var sassSettings = {
 module.exports = function (gulp, sassPaths) {
   // Set value of paths to either the default or user entered
   sassPaths = sassPaths || toSass;
+
+  //////////////////////////////
+  // TERRIBLE HORRIBLE HACK BECAUSE THINGS ARE TERRIBLE AND HORRIBLE WITH LIBSASS RIGHT NOW
+  //////////////////////////////
+  gulp.task('sass:fix-libsass', function (cb) {
+    var files = [
+      'bower_components/modular-scale/stylesheets/modular-scale/_sort-list.scss'
+    ];
+
+    files.forEach(function (path) {
+      var file = fs.readFileSync(path, 'utf-8');
+      file = file.replace(/\@elseif/g, '@else if');
+      fs.writeFileSync(path, file);
+    });
+
+    cb();
+  });
 
   //////////////////////////////
   // Encapsulate task in function to choose path to work on

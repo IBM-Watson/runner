@@ -17,7 +17,7 @@ module.exports = function (gulp) {
   gulp.task('build', function (cb) {
     return sequence(
       // Linting
-      'lint',
+      ['lint', 'sass:fix-libsass'],
 
       // Pre-Compiled Files
       ['sass', 'swig', 'language', 'imagemin'],
@@ -36,7 +36,7 @@ module.exports = function (gulp) {
   gulp.task('build:server', function (cb) {
     return sequence(
       // Linting
-      'lint:server',
+      ['lint:server', 'sass:fix-libsass'],
 
       // Pre-Compiled Files
       ['sass:server', 'swig:server', 'language', 'imagemin'],
