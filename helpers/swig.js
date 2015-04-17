@@ -58,6 +58,17 @@ var getIBMColor = function getIBMColor (palette, tint) {
   return ibmColors[palette][tint];
 }
 
+swig.setFilter('ibmSass', function (palette, tint) {
+  if (typeof tint === 'string' && tint.toLowerCase() === 'core') {
+    tint = ''
+  }
+  else {
+    tint = ', ' + tint;
+  }
+
+  return 'color(\'' + palette.toLowerCase() + '\'' + tint + ')';
+});
+
 swig.setFilter('ibmHex', function (palette, tint) {
   return getIBMColor(palette, tint);
 });
