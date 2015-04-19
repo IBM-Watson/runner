@@ -6,7 +6,7 @@
 var swig = require('swig'),
     fs = require('fs-extra');
 
-var ibmColors = fs.readJSONSync(process.cwd() + '/bower_components/ibm-colors/_ibm-colors.json');
+var ibmColors = fs.readJSONSync(process.cwd() + '/bower_components/ibm-colors/ibm-colors.json');
 
 //////////////////////////////
 // Pattern Swig Tag
@@ -57,6 +57,15 @@ var getIBMColor = function getIBMColor (palette, tint) {
 
   return ibmColors[palette][tint];
 }
+
+swig.setFilter('ibmTextColor', function (tint) {
+  if (tint === 'core' || tint >= 50) {
+    return getIBMColor('neutral', 20);
+  }
+  else {
+    return getIBMColor('gray', 90);
+  }
+});
 
 swig.setFilter('ibmSass', function (palette, tint) {
   if (typeof tint === 'string' && tint.toLowerCase() === 'core') {
