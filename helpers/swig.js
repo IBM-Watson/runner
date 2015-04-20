@@ -60,7 +60,7 @@ var getIBMColor = function getIBMColor (palette, tint) {
 
 swig.setFilter('ibmTextColor', function (tint) {
   if (tint === 'core' || tint >= 50) {
-    return getIBMColor('neutral', 20);
+    return getIBMColor('white', 'core');
   }
   else {
     return getIBMColor('gray', 90);
