@@ -15,8 +15,20 @@ var through = require('through2'),
     marked = require('./markdown'),
     swig = require('./swig'),
     yaml = require('js-yaml'),
+    path = require('path'),
     PluginError = gutil.PluginError,
     PLUGIN_NAME = 'library-build';
+
+//////////////////////////////
+// Set up subcontent imports
+//////////////////////////////
+var subcontent = fs.readdirSync('library/templates/subcontent'),
+    scImport = '';
+
+subcontent.forEach(function (file) {
+  var macroName = path.basename(file, path.extname(file));
+  scImport += '{% import "' + process.cwd() + '/library/templates/subcontent/' + file + '" as ' + macroName + ' %}\n';
+});
 
 //////////////////////////////
 // Export
@@ -35,14 +47,6 @@ module.exports = function (options) {
     }
   });
 
-  var templateCompile = function (file) {
-    var render = marked(file.contents.toString());
-
-    render = '---\n' + yaml.safeDump(file.meta) + '---\n' + '<div class="base--STYLED">\n' + render + '</div>';
-
-    return new Buffer(render);
-  }
-
   //////////////////////////////
   // Through Object
   //////////////////////////////
@@ -52,6 +56,9 @@ module.exports = function (options) {
       'folder': file.path.replace(process.cwd() + '/', '').split('/').slice(0, -1).join('/'),
       'inner': file.path.replace(process.cwd() + '/', '').split('/').slice(1, -1).join('/')
     };
+
+    var renderedPage = '',
+        frontmatter = yaml.safeDump(file.meta);
 
     /////////////////////////////
     // Default plugin issues
@@ -67,7 +74,29 @@ module.exports = function (options) {
     //////////////////////////////
     // Manipulate Files
     //////////////////////////////
-    file.contents = templateCompile(file);
+    renderedPage = marked(file.contents.toString());
+
+    if (file.meta && file.meta.variables) {
+      renderedPage = scImport + renderedPage;
+
+      var compile = swig.compile(renderedPage, {
+        filename: file.path
+      });
+
+      renderedPage = compile(file.meta.variables);
+    }
+
+
+    if (Object.keys(file.meta).length) {
+      frontmatter = '---\n' + frontmatter + '---\n';
+    }
+    else {
+      frontmatter = '';
+    }
+
+    renderedPage = frontmatter + '<div class="base--STYLED">\n' + renderedPage + '</div>';
+
+    file.contents = new Buffer(renderedPage);
     file.path = paths.folder + '/index.html';
 
     gutil.log('Page ' + gutil.colors.magenta(paths.relative) + ' compiled');
