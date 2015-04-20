@@ -3,7 +3,10 @@
 //////////////////////////////
 // Variables
 //////////////////////////////
-var swig = require('swig');
+var swig = require('swig'),
+    fs = require('fs-extra');
+
+var ibmColors = fs.readJSONSync(process.cwd() + '/bower_components/ibm-colors/ibm-colors.json');
 
 //////////////////////////////
 // Pattern Swig Tag
@@ -45,6 +48,63 @@ swig.setTag(
   swigPatternTag.compile,
   swigPatternTag.ends
 );
+
+//////////////////////////////
+// Color Filters
+//////////////////////////////
+var getIBMColor = function getIBMColor (palette, tint) {
+  palette = palette.toLowerCase();
+
+  return ibmColors[palette][tint];
+}
+
+swig.setFilter('ibmTextColor', function (tint) {
+  if (tint === 'core' || tint >= 50) {
+    return getIBMColor('white', 'core');
+  }
+  else {
+    return getIBMColor('gray', 90);
+  }
+});
+
+swig.setFilter('ibmSass', function (palette, tint) {
+  if (typeof tint === 'string' && tint.toLowerCase() === 'core') {
+    tint = ''
+  }
+  else {
+    tint = ', ' + tint;
+  }
+
+  return 'color(\'' + palette.toLowerCase() + '\'' + tint + ')';
+});
+
+swig.setFilter('ibmHex', function (palette, tint) {
+  return getIBMColor(palette, tint);
+});
+
+swig.setFilter('ibmRGB', function (palette, tint) {
+  var hex = getIBMColor(palette, tint),
+      r, g, b;
+
+  hex = hex.substr(1);
+
+  if (hex.length === 3) {
+    r = parseInt(hex[0] + '' + hex[0], 16);
+    g = parseInt(hex[1] + '' + hex[1], 16);
+    b = parseInt(hex[2] + '' + hex[2], 16);
+  }
+  else if (hex.length === 6) {
+    r = parseInt(hex.substr(0, 2), 16);
+    g = parseInt(hex.substr(2, 2), 16);
+    b = parseInt(hex.substr(4, 2), 16);
+  }
+  else {
+    throw new Error('Invalid Hex color ' + hex);
+  }
+
+  return 'rgb(' + r + ', ' + g + ', ' + b + ')';
+});
+
 
 //////////////////////////////
 // Export Swig
