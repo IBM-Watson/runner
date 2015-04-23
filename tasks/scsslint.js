@@ -5,8 +5,7 @@
 //////////////////////////////
 var gutil = require('gulp-util'),
     ifElse = require('gulp-if-else'),
-    stylish = require('eslint/lib/formatters/stylish'),
-    scsslint = require('gulp-scss-lint');
+    stylish = require('eslint/lib/formatters/stylish');
 
 //////////////////////////////
 // Internal Vars
@@ -24,50 +23,10 @@ module.exports = function (gulp, sassLintPaths) {
   sassLintPaths = sassLintPaths || toSassLint;
 
   //////////////////////////////
-  // Custom Reporter
-  //////////////////////////////
-  var sassLintReporter = function (file) {
-    if (!file.scsslint.success) {
-      var report = {};
-
-      report.filePath = file.path;
-      report.messages = [];
-
-      // Add Filename
-      file.scsslint.issues.forEach(function (v) {
-        var message = {};
-
-        // Set severity
-        if (v.severity === 'error') {
-          message.severity = 2;
-        }
-        else {
-          message.severity = 1;
-        }
-
-        // Set line and columns
-        message.line = v.line;
-        message.column = v.column;
-        message.message = v.reason;
-        message.ruleId = v.linter;
-
-        report.messages.push(message);
-      });
-      // Pass to Stylish
-      gutil.log(stylish([report]));
-    }
-  };
-
-  //////////////////////////////
   // Encapsulate task in function to choose path to work on
   //////////////////////////////
   var sassLintTask = function (path, fail) {
-    return gulp.src(path)
-      .pipe(scsslint({
-        'bundleExec': true,
-        'customReport': sassLintReporter
-      }))
-      .pipe(ifElse(fail === true, scsslint.failReporter));
+    return gulp.src(path);
   }
 
   //////////////////////////////
