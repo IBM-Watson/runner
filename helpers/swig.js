@@ -4,6 +4,7 @@
 // Variables
 //////////////////////////////
 var swig = require('swig'),
+    path = require('path'),
     fs = require('fs-extra');
 
 var ibmColors = fs.readJSONSync(process.cwd() + '/bower_components/ibm-colors/ibm-colors.json');
@@ -105,6 +106,26 @@ swig.setFilter('ibmRGB', function (palette, tint) {
   return 'rgb(' + r + ', ' + g + ', ' + b + ')';
 });
 
+//////////////////////////////
+// File Types
+//////////////////////////////
+var getFileExtension = function getFileExtension(file) {
+  return path.extname(file).replace('.', '');
+}
+
+swig.setFilter('fileExtension', function (file) {
+  return getFileExtension(file);
+});
+
+swig.setFilter('fileType', function (file) {
+  var ext = getFileExtension(file);
+  if (ext !== 'webm' && ext !== 'mp4') {
+    return 'image';
+  }
+  else {
+    return 'video';
+  }
+});
 
 //////////////////////////////
 // Export Swig
