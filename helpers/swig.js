@@ -5,6 +5,7 @@
 //////////////////////////////
 var swig = require('swig'),
     path = require('path'),
+    marked = require('./markdown'),
     fs = require('fs-extra');
 
 var ibmColors = fs.readJSONSync(process.cwd() + '/bower_components/ibm-colors/ibm-colors.json');
@@ -125,6 +126,13 @@ swig.setFilter('fileType', function (file) {
   else {
     return 'video';
   }
+});
+
+//////////////////////////////
+// Markdown Filter
+//////////////////////////////
+swig.setFilter('markdown', function (text) {
+  return marked(text);
 });
 
 //////////////////////////////
