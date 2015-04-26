@@ -32,7 +32,7 @@ module.exports = function (gulp, SwigPaths) {
         'template': true,
         'page': false
       }))
-      .pipe(dest('./tmp/ui-patterns'));
+      .pipe(dest('./tmp/ui-patterns/patterns'));
       // .pipe(reload({stream: true}));
   }
 
