@@ -1,7 +1,9 @@
 var fs = require('fs-extra'),
     path = require('path'),
     util = require('util'),
+    fm = require('front-matter'),
     gutil = require('gulp-util'),
+    through = require('through2'),
     _s = require('underscore.string');
 
 var base = process.cwd() + '/tmp';
@@ -14,7 +16,8 @@ var inspect = function (object) {
 }
 
 var makeTitle = function makeTitle (string) {
-  return  _s.titleize(_s.humanize(string)).replace('Ui ', 'UI ');
+  string = string.replace('--', ' - ');
+  return  _s.titleize(string).replace('Ui ', 'UI ');
 }
 
 var processDirs = function processDirs (files, base) {
@@ -88,8 +91,13 @@ var writeRedirectIndex = function writeRedirectIndex(redirect, title) {
 
 getdirs(process.cwd() + '/tmp', function (err, dirs) {
   var menu = dirs.dirs,
+      fin = {},
       key,
       section;
+
+  Object.keys(menu).forEach(function (dir) {
+    fin[dir] = {};
+  });
 
   Object.keys(menu).forEach(function (dir) {
 
@@ -104,11 +112,16 @@ getdirs(process.cwd() + '/tmp', function (err, dirs) {
         writeRedirectIndex('/' + key + '/' + Object.keys(menu[key].sections)[0], menu[key].title);
       }
 
+      console.log(gutil.colors.cyan(key));
 
       Object.keys(sections.dirs).forEach(function (section) {
         var subsections = getdirsSync(base + '/' + key + '/' + section),
+            render = 0,
             subnav = [],
+            i,
             subnav;
+
+
 
         Object.keys(subsections.dirs).forEach(function (subsection) {
           var menuItem = {};
@@ -121,21 +134,67 @@ getdirs(process.cwd() + '/tmp', function (err, dirs) {
           subnav.push(menuItem);
         });
 
-
         if (subnav.length) {
           menu[key].sections[section].subnav = subnav;
 
           if (subsections.index === false) {
             writeRedirectIndex(menu[key].sections[section].subnav[0].url, menu[key].sections[section].title);
           }
+
+          // Get Subsections
+          subnav.forEach(function (navSection) {
+            // console.log(navSection);
+            var navSectionItems = getdirsSync(base + navSection.url);
+
+            if (navSectionItems.index) {
+              fin[key][navSection.url] = navSectionItems.base + '/index.html';
+            }
+            else {
+              Object.keys(navSectionItems.dirs).forEach(function (subNavSection) {
+                fin[key][navSection.url + '/' + subNavSection] = navSectionItems.base + '/' + subNavSection + '/index.html';
+              });
+
+            }
+            // console.log(navSectionItems);
+          });
+        }
+        else {
+          if (subsections.index) {
+            menu[key].sections[section].url = '/' + key + '/' + section;
+
+            fin[key]['/' + key + '/' + section] = subsections.base + '/index.html';
+          }
         }
       });
 
-      console.log(gutil.colors.cyan(key));
-      inspect(menu[key]);
+
+
+
+
+      render = Object.keys(fin[key]).length;
+
+      // console.log(fin[key]);
+
+      Object.keys(fin[key]).forEach(function (renderKey) {
+        var content = fs.readFileSync(fin[key][renderKey], 'utf-8');
+        content = fm(content);
+
+        fs.outputFile(process.cwd() + '/www' + renderKey + '/index.html', content.body,  function (err) {
+          console.log('Wrote ' + renderKey);
+        });
+      });
+
+
+      // inspect(fin[key]);
+      console.log(render);
+      // inspect(menu[key]);
       console.log('\n');
+
+
 
     });
   });
+
+
 
 });
