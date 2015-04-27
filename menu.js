@@ -16,8 +16,7 @@ var inspect = function (object) {
 }
 
 var makeTitle = function makeTitle (string) {
-  string = string.replace('--', ' - ');
-  return  _s.titleize(string).replace('Ui ', 'UI ');
+  return  _s.titleize(_s.humanize(string)).replace('Ui-', 'UI ').replace('Input ', 'Input - ');
 }
 
 var processDirs = function processDirs (files, base) {
@@ -89,14 +88,22 @@ var writeRedirectIndex = function writeRedirectIndex(redirect, title) {
   });
 }
 
+var fin = {},
+    mainNav = {},
+    menu;
+
 getdirs(process.cwd() + '/tmp', function (err, dirs) {
-  var menu = dirs.dirs,
-      fin = {},
-      key,
+  var key,
       section;
+
+  menu = dirs.dirs;
 
   Object.keys(menu).forEach(function (dir) {
     fin[dir] = {};
+    mainNav[dir] = {
+      'title': menu[dir].title,
+      'url': dir
+    }
   });
 
   Object.keys(menu).forEach(function (dir) {
@@ -176,25 +183,53 @@ getdirs(process.cwd() + '/tmp', function (err, dirs) {
       // console.log(fin[key]);
 
       Object.keys(fin[key]).forEach(function (renderKey) {
-        var content = fs.readFileSync(fin[key][renderKey], 'utf-8');
-        content = fm(content);
-
-        fs.outputFile(process.cwd() + '/www' + renderKey + '/index.html', content.body,  function (err) {
-          console.log('Wrote ' + renderKey);
-        });
+        outputFile(key, renderKey);
       });
-
-
-      // inspect(fin[key]);
-      console.log(render);
-      // inspect(menu[key]);
-      console.log('\n');
-
-
-
     });
   });
-
-
-
 });
+
+
+var outputFile = function outputFile (key, renderKey) {
+  var templatePath = 'library/templates/',
+      pageTemplate,
+      subnav,
+      layout,
+      title,
+      render;
+
+
+  fs.readFile(fin[key][renderKey], 'utf-8', function (err, content) {
+    if (err) throw err;
+
+    content = fm(content);
+
+    pageTemplate = content.attributes.pageTemplate ? content.attributes.pageTemplate : templatePath + '_layout.html';
+
+    layout = {
+      'title': content.attributes.name ? ' | ' + content.attributes.name : '',
+      'content': content.body,
+      'navigation': {
+        'main': mainNav,
+        'sub': menu[key].sections
+      }
+    };
+
+    fs.outputFile(process.cwd() + '/www' + renderKey + '/index.html', content.body, function (err) {
+      if (err) throw err;
+
+      delete fin[key][renderKey];
+
+      if (Object.keys(fin[key]).length === 0) {
+
+        delete fin[key];
+
+        inspect(layout.navigation);
+
+        if (Object.keys(fin).length === 0) {
+          console.log('done');
+        }
+      }
+    });
+  });
+}
