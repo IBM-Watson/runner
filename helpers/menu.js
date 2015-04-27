@@ -99,6 +99,18 @@ module.exports = function (options, cb) {
     start = time.now(),
     end;
 
+  // fin['index'] = {
+  //   'index': process.cwd() + '/tmp/index.html'
+  // };
+
+  fs.readFile(process.cwd() + '/tmp/index.html', 'utf-8', function (err, content) {
+    if (err) throw err;
+
+    fs.outputFile(process.cwd() + '/www/index.html', contentBuild(content), function (err) {
+      if (err) throw err;
+    });
+  });
+
   getdirs(process.cwd() + '/tmp', function (err, dirs) {
     var key,
         section;
@@ -181,22 +193,20 @@ module.exports = function (options, cb) {
     });
   });
 
-  var outputFile = function outputFile (key, renderKey) {
+  var contentBuild = function contentBuild (content, key) {
     var templatePath = 'library/templates/',
-        title = ' | ' + menu[key].title + ' - ',
+        title = ' | ',
         pageTemplate,
-        subnav,
+        subNav,
         layout,
         title,
         render;
 
+    content = fm(content);
+    pageTemplate = content.attributes.pageTemplate ? content.attributes.pageTemplate : templatePath + '_layout.html';
 
-    fs.readFile(fin[key][renderKey], 'utf-8', function (err, content) {
-      if (err) throw err;
-
-      content = fm(content);
-
-      pageTemplate = content.attributes.pageTemplate ? content.attributes.pageTemplate : templatePath + '_layout.html';
+    if (key) {
+      title += menu[key].title + ' - '
 
       if (content.attributes.name) {
         title += content.attributes.name;
@@ -207,21 +217,37 @@ module.exports = function (options, cb) {
       else {
         title = '';
       }
+    }
+    else {
+      title = '';
+    }
 
-      layout = {
-        'title': title,
-        'content': content.body,
-        'navigation': {
-          'main': mainNav,
-          'sub': menu[key].sections
-        }
-      };
+    if (menu[key] && menu[key].sections) {
+      subnav = menu[key].sections;
+    }
 
-      render = swig.compileFile(pageTemplate)({
-        'layout': layout
-      });
+    layout = {
+      'title': title,
+      'content': content.body,
+      'navigation': {
+        'main': mainNav,
+        'sub': subNav
+      }
+    };
 
-      fs.outputFile(process.cwd() + '/www' + renderKey + '/index.html', render, function (err) {
+    render = swig.compileFile(pageTemplate)({
+      'layout': layout
+    });
+
+    return render;
+  };
+
+  var outputFile = function outputFile (key, renderKey) {
+
+    fs.readFile(fin[key][renderKey], 'utf-8', function (err, content) {
+      if (err) throw err;
+
+      fs.outputFile(process.cwd() + '/www' + renderKey + '/index.html', contentBuild(content, key), function (err) {
         if (err) throw err;
 
         // gutil.log('Wrote ' + gutil.colors.magenta(renderKey.substring(1)) + ' with title ' + gutil.colors.cyan(layout.title.substring(3)));
@@ -229,7 +255,6 @@ module.exports = function (options, cb) {
         delete fin[key][renderKey];
 
         if (Object.keys(fin[key]).length === 0) {
-
           delete fin[key];
 
           if (Object.keys(fin).length === 0) {
