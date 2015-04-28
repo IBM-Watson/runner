@@ -108,6 +108,7 @@ module.exports = function (options, cb) {
   var fin = {},
     mainNav = {},
     menu,
+    absoluteMenu = {},
     start = time.now(),
     end;
 
@@ -246,12 +247,15 @@ module.exports = function (options, cb) {
     }
 
     if (subNav) {
-      Object.keys(subNav).forEach(function (subnavItem) {
+      Object.keys(subNav).forEach(function (subnavItem, j) {
         var miholder = [];
         if (subNav[subnavItem].url) {
           subNav[subnavItem].url.split('/').forEach(function (mi) {
             miholder.push(mi.replace(/^([0-9]+\-)/g, ''));
           });
+          if (j === 0) {
+            absoluteMenu[key.replace(/^([0-9]+\-)/g, '')] = miholder.join('/');
+          }
           subNav[subnavItem].url = miholder.join('/');
           miholder = [];
         }
@@ -259,7 +263,10 @@ module.exports = function (options, cb) {
           subNav[subnavItem].subnav.forEach(function (sna, k) {
             sna.url.split('/').forEach(function (mi) {
               miholder.push(mi.replace(/^([0-9]+\-)/g, ''));
-            })
+            });
+            if (j === 0 && k === 0) {
+              absoluteMenu[key.replace(/^([0-9]+\-)/g, '')] = miholder.join('/');
+            }
             sna.url = miholder.join('/');
             subNav[subnavItem].subnav[k] = sna;
             miholder = [];
@@ -320,6 +327,8 @@ module.exports = function (options, cb) {
 
           if (Object.keys(fin).length === 0) {
             end = time.now();
+
+            // console.log(absoluteMenu);
             gutil.log('Guide rebuilt after ' + gutil.colors.magenta(Math.round((end - start) / 1000) + 'ms'));
             cb();
             // console.timeEnd('render');
