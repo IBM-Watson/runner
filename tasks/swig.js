@@ -5,6 +5,7 @@
 //////////////////////////////
 var gutil = require('gulp-util'),
     swig = require('../helpers/pattern-build'),
+    rename = require('gulp-rename'),
     browserSync = require('browser-sync'),
     dest = require('../helpers/relative-dest'),
     reload = browserSync.reload;
@@ -32,7 +33,10 @@ module.exports = function (gulp, SwigPaths) {
         'template': true,
         'page': false
       }))
-      .pipe(dest('./tmp/ui-patterns'));
+      .pipe(rename(function (path) {
+        path.basename = 'index';
+      }))
+      .pipe(dest('./tmp/ui-patterns/patterns'));
       // .pipe(reload({stream: true}));
   }
 
