@@ -17,6 +17,7 @@ module.exports = function (gulp) {
     return clean([
       'www/**/*',
       '!www/.gitkeep',
+      '!www/CNAME',
       'tmp/'
     ], cb);
   });
