@@ -243,6 +243,7 @@ module.exports = function (options, cb) {
       'collapseBooleanAttributes': true,
       'removeRedundantAttributes': true,
       'removeEmptyAttributes': true,
+      'removeEmptyElements': true,
       'minifyJS': true,
       'minifyCSS': true,
       'minifyURLs': true
