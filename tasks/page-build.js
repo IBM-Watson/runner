@@ -6,7 +6,7 @@
 var gutil = require('gulp-util'),
     front = require('gulp-front-matter'),
     browserSync = require('browser-sync'),
-    swig = require('../helpers/page-build'),
+    swig = require('../helpers/menu'),
     dest = require('../helpers/relative-dest'),
     reload = browserSync.reload;
 
