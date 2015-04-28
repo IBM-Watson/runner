@@ -6,6 +6,7 @@ var fs = require('fs-extra'),
     through = require('through2'),
     swig = require('./swig.js'),
     time = require('microtime'),
+    htmlmin = require('html-minifier').minify,
     _s = require('underscore.string');
 
 var base = process.cwd() + '/tmp';
@@ -198,7 +199,6 @@ module.exports = function (options, cb) {
         title = ' | ',
         pageTemplate,
         subNav,
-        layout,
         title,
         render;
 
@@ -223,23 +223,30 @@ module.exports = function (options, cb) {
     }
 
     if (menu[key] && menu[key].sections) {
-      subnav = menu[key].sections;
+      subNav = menu[key].sections;
     }
 
-    layout = {
-      'title': title,
-      'content': content.body,
+    render = swig.compileFile(pageTemplate)({
+      'layout': {
+        'title': title,
+        'content': content.body,
+      },
       'navigation': {
         'main': mainNav,
         'sub': subNav
       }
-    };
-
-    render = swig.compileFile(pageTemplate)({
-      'layout': layout
     });
 
-    return render;
+    return htmlmin(render, {
+      'removeComments': true,
+      'collapseWhitespace': true,
+      'collapseBooleanAttributes': true,
+      'removeRedundantAttributes': true,
+      'removeEmptyAttributes': true,
+      'minifyJS': true,
+      'minifyCSS': true,
+      'minifyURLs': true
+    });
   };
 
   var outputFile = function outputFile (key, renderKey) {
