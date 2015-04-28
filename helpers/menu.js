@@ -213,7 +213,7 @@ module.exports = function (options, cb) {
     });
   });
 
-  var contentBuild = function contentBuild (content, key) {
+  var contentBuild = function contentBuild (content, key, outputKey) {
     var templatePath = 'library/templates/',
         title = ' | ',
         pageTemplate,
@@ -275,7 +275,11 @@ module.exports = function (options, cb) {
       },
       'navigation': {
         'main': mainNav,
-        'sub': subNav
+        'sub': subNav,
+        'active': {
+          'main': key ? key.replace(/^([0-9]+\-)/g, '') : '',
+          'sub': outputKey ? outputKey : ''
+        }
       }
     });
 
@@ -304,7 +308,7 @@ module.exports = function (options, cb) {
 
       outputKey = outputKey.join('/');
 
-      fs.outputFile(process.cwd() + '/www' + outputKey + '/index.html', contentBuild(content, key), function (err) {
+      fs.outputFile(process.cwd() + '/www' + outputKey + '/index.html', contentBuild(content, key, outputKey), function (err) {
         if (err) throw err;
 
         // gutil.log('Wrote ' + gutil.colors.magenta(renderKey.substring(1)) + ' with title ' + gutil.colors.cyan(layout.title.substring(3)));
