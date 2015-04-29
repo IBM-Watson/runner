@@ -5,6 +5,7 @@
 //////////////////////////////
 var gutil = require('gulp-util'),
     sass = require('gulp-sass'),
+    rename = require('gulp-rename'),
     fs = require('fs-extra'),
     ifElse = require('gulp-if-else'),
     importOnce = require('node-sass-import-once'),
@@ -13,12 +14,17 @@ var gutil = require('gulp-util'),
 //////////////////////////////
 // Internal Vars
 //////////////////////////////
-var toSass = [
+var toWatch = [
   'patterns/**/*.scss',
-  'patterns/**/*.sass'
+  'patterns/**/*.sass',
+  'library/sass/**/*.scss',
+  'library/sass/**/*.sass'
 ];
 
+var toSass = process.cwd() + '/library/sass/style.scss';
+
 var sassSettings = {
+  'outputStyle': 'compressed',
   'importer': importOnce,
   'importOnce': {
     'index': true,
@@ -31,9 +37,6 @@ var sassSettings = {
 // Export
 //////////////////////////////
 module.exports = function (gulp, sassPaths) {
-  // Set value of paths to either the default or user entered
-  sassPaths = sassPaths || toSass;
-
   //////////////////////////////
   // TERRIBLE HORRIBLE HACK BECAUSE THINGS ARE TERRIBLE AND HORRIBLE WITH LIBSASS RIGHT NOW
   //////////////////////////////
@@ -57,6 +60,9 @@ module.exports = function (gulp, sassPaths) {
   var sassTask = function (path) {
     return gulp.src(path)
       .pipe(sass(sassSettings).on('error', sass.logError))
+      .pipe(rename(function (path) {
+        path.dirname = '..';
+      }))
       .pipe(dest('./www/css/'));
   };
 
@@ -64,8 +70,11 @@ module.exports = function (gulp, sassPaths) {
   // Core Task
   //////////////////////////////
   gulp.task('sass', function () {
-    return gulp.src(sassPaths)
+    return gulp.src(toSass)
       .pipe(sass(sassSettings))
+      .pipe(rename(function (path) {
+        path.dirname = '..';
+      }))
       .pipe(dest('./www/css/'));
   });
 
@@ -73,14 +82,14 @@ module.exports = function (gulp, sassPaths) {
   // Server Initialization Task
   //////////////////////////////
   gulp.task('sass:server', function () {
-    return sassTask(sassPaths);
+    return sassTask(toSass);
   });
 
   //////////////////////////////
   // Watch Task
   //////////////////////////////
   gulp.task('sass:watch', function () {
-    return gulp.watch(sassPaths)
+    return gulp.watch(toWatch)
       .on('change', function (event) {
         // Add absolute and relative (to Gulpfile) paths
         event.path = {
@@ -92,7 +101,7 @@ module.exports = function (gulp, sassPaths) {
         gutil.log('File ' + gutil.colors.magenta(event.path.relative) + ' was ' + event.type);
 
         // Call the task
-        return sassTask(process.cwd() + '/patterns/crick.scss');
+        return sassTask(toSass);
       });
   });
 }
