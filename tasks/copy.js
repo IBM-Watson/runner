@@ -12,7 +12,8 @@ var gutil = require('gulp-util'),
 // Internal Vars
 //////////////////////////////
 var toCopy = [
-  'library/bower_components/**'
+  'language/assets/**',
+  'language/videos/**'
 ];
 
 //////////////////////////////
