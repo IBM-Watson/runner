@@ -14,7 +14,8 @@ var eslint = require('gulp-eslint'),
 //////////////////////////////
 var toEslint = [
   'patterns/**/*.js',
-  '!patterns/**/tests/*.js'
+  '!patterns/**/tests/*.js',
+  '!patterns/**/*.min.js'
 ];
 
 //////////////////////////////
