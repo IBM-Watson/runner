@@ -93,3 +93,9 @@ require('./tasks/page-build')(gulp);
 // imagemin Tasks
 //////////////////////////////
 require('./tasks/imagemin')(gulp);
+
+
+//////////////////////////////
+// assets Tasks
+//////////////////////////////
+require('./tasks/assets')(gulp);
