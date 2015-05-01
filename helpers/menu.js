@@ -6,6 +6,7 @@ var fs = require('fs-extra'),
     through = require('through2'),
     swig = require('./swig.js'),
     time = require('microtime'),
+    glob = require('glob'),
     htmlmin = require('html-minifier').minify,
     _s = require('underscore.string');
 
@@ -326,15 +327,33 @@ module.exports = function (options, cb) {
           delete fin[key];
 
           if (Object.keys(fin).length === 0) {
-            end = time.now();
+            glob(process.cwd() + '/www/**/*.html', function (err, files) {
+              var fileCount = files.length,
+                  fi;
+              files.forEach(function (file) {
+                var f = fs.readFileSync(file, 'utf-8');
 
-            // console.log(absoluteMenu);
-            gutil.log('Guide rebuilt after ' + gutil.colors.magenta(Math.round((end - start) / 1000) + 'ms'));
-            cb();
-            // console.timeEnd('render');
+                Object.keys(absoluteMenu).forEach(function (pth) {
+                  var find = 'href="/' + pth + '"',
+                      re = new RegExp(find, 'g');
+
+                  f = f.replace(re, 'href="' + absoluteMenu[pth] + '"');
+                });
+
+                fs.outputFile(file, f, function (e) {
+                  fileCount--;
+                  if (fileCount === 0) {
+                    end = time.now();
+
+                    gutil.log('Guide rebuilt after ' + gutil.colors.magenta(Math.round((end - start) / 1000) + 'ms'));
+                    cb();
+                  }
+                });
+              });
+            });
           }
         }
       });
     });
-  }
+  };
 }
