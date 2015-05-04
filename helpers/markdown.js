@@ -12,7 +12,7 @@ marked.setOptions({
   'tables': true,
   'breaks': true,
   'pedantic': false,
-  'sanitize': true,
+  'sanitize': false,
   'smartLists': false,
   'smartypants': true,
   'langPrefix': 'language-'
