@@ -109,6 +109,7 @@ module.exports = function (options, cb) {
   var fin = {},
     mainNav = {},
     menu,
+    nextPrev = {},
     absoluteMenu = {},
     start = time.now(),
     end;
@@ -149,13 +150,12 @@ module.exports = function (options, cb) {
     });
 
     Object.keys(menu).forEach(function (dir) {
-
-
       getdirs(base + '/' + dir, function (err, sections) {
         key = sections.base.split('/');
         key = key[key.length - 1];
 
         menu[key].sections = sections.dirs;
+        nextPrev[key] = {};
 
         if (sections.index === false) {
           writeRedirectIndex('/' + key + '/' + Object.keys(menu[key].sections)[0], menu[key].title);
@@ -175,6 +175,7 @@ module.exports = function (options, cb) {
             menuItem.url = '/' + key + '/' + section + '/' + subsection;
 
             subnav.push(menuItem);
+            nextPrev[key][menuItem.url] = menuItem;
           });
 
           if (subnav.length) {
@@ -201,6 +202,7 @@ module.exports = function (options, cb) {
           else {
             if (subsections.index) {
               menu[key].sections[section].url = '/' + key + '/' + section;
+              nextPrev[key][menu[key].sections[section].url] = menu[key].sections[section];
 
               fin[key]['/' + key + '/' + section] = subsections.base + '/index.html';
             }
@@ -215,10 +217,14 @@ module.exports = function (options, cb) {
     });
   });
 
-  var contentBuild = function contentBuild (content, key, outputKey) {
+  var contentBuild = function contentBuild (content, key, outputKey, renderKey) {
     var templatePath = 'library/templates/',
         title = ' | ',
         pageTemplate,
+        next,
+        prev,
+        npLength,
+        npPos,
         subNav,
         title,
         render;
@@ -247,6 +253,34 @@ module.exports = function (options, cb) {
       subNav = menu[key].sections;
     }
 
+    //////////////////////////////
+    // Find Next/Previous
+    //////////////////////////////
+
+    if (key) {
+      npLength = Object.keys(nextPrev[key]).length;
+      npPos = Object.keys(nextPrev[key]).indexOf(renderKey);
+
+      if (npPos !== 0) {
+        prev = Object.keys(nextPrev[key])[npPos - 1];
+        prev = nextPrev[key][prev];
+      }
+
+      if (npPos !== npLength - 1) {
+        next = Object.keys(nextPrev[key])[npPos + 1];
+        next = nextPrev[key][next]
+      }
+
+      if (npPos === -1) {
+        prev = null;
+        next = null;
+      }
+    }
+
+
+    //////////////////////////////
+    // Build pretty Subnav
+    //////////////////////////////
     if (subNav) {
       Object.keys(subNav).forEach(function (subnavItem, j) {
         var miholder = [];
@@ -287,7 +321,9 @@ module.exports = function (options, cb) {
         'active': {
           'main': key ? key.replace(/^([0-9]+\-)/g, '') : '',
           'sub': outputKey ? outputKey : ''
-        }
+        },
+        'next': next,
+        'previous': prev
       }
     });
 
@@ -316,7 +352,7 @@ module.exports = function (options, cb) {
 
       outputKey = outputKey.join('/');
 
-      fs.outputFile(process.cwd() + '/www' + outputKey + '/index.html', contentBuild(content, key, outputKey), function (err) {
+      fs.outputFile(process.cwd() + '/www' + outputKey + '/index.html', contentBuild(content, key, outputKey, renderKey), function (err) {
         if (err) throw err;
 
         // gutil.log('Wrote ' + gutil.colors.magenta(renderKey.substring(1)) + ' with title ' + gutil.colors.cyan(layout.title.substring(3)));
