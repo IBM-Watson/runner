@@ -13,7 +13,10 @@ var gutil = require('gulp-util'),
 //////////////////////////////
 var toCopy = [
   'language/assets/**',
-  'language/videos/**'
+  'language/videos/**',
+  'library/assets/**',
+  'library/videos/**',
+  'library/fonts/**'
 ];
 
 //////////////////////////////

@@ -13,7 +13,8 @@ var gutil = require('gulp-util'),
 // Internal Vars
 //////////////////////////////
 var toImagemin = [
-  'language/images/**/*'
+  'language/images/**/*',
+  'library/images/**/*'
 ];
 
 //////////////////////////////
