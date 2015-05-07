@@ -15,6 +15,7 @@
     "browser-sync": "^2.2.3",
     "del": "^1.0.0",
     "gulp": "^3.8.10",
+    "gulp-batch": "^1.0.5",
     "gulp-css-target": "^0.1.0",
     "gulp-eslint": "^0.1.8",
     "gulp-imagemin": "^2.2.1",

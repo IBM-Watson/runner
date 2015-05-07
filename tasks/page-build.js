@@ -8,6 +8,7 @@ var gutil = require('gulp-util'),
     browserSync = require('browser-sync'),
     swig = require('../helpers/menu'),
     dest = require('../helpers/relative-dest'),
+    batch  = require('gulp-batch'),
     reload = browserSync.reload;
 
 //////////////////////////////
@@ -38,11 +39,11 @@ module.exports = function (gulp, PageBuildPaths) {
   // Watch Task
   //////////////////////////////
   gulp.task('page-build:watch', function () {
-    return gulp.watch(PageBuildPaths)
-      .on('change', function (event) {
-        swig({}, function () {
-          browserSync.reload();
-        });
-      });
+    return gulp.watch(PageBuildPaths, batch(function (events, cb) {
+      events.on('data', swig({}, function () {
+        browserSync.reload();
+      }))
+      .on('end', cb);
+    }));
   });
 }
