@@ -324,7 +324,8 @@ module.exports = function (options, cb) {
         },
         'next': next,
         'previous': prev
-      }
+      },
+      'resources': content.attributes.resources
     });
 
     return htmlmin(render, {
