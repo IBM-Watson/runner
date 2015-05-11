@@ -20,7 +20,7 @@ var inspect = function (object) {
 }
 
 var makeTitle = function makeTitle (string) {
-  return _s.titleize(_s.humanize(string)).replace('Ui ', 'UI ').replace('Input ', 'Input - ').replace(/^([0-9]+\s)/g, '');
+  return _s.titleize(_s.humanize(string)).replace('Ui ', 'UI ').replace(' Url', ' URL').replace('Input ', 'Input - ').replace(/^([0-9]+\s)/g, '');
 }
 
 var processDirs = function processDirs (files, base) {
@@ -109,6 +109,7 @@ module.exports = function (options, cb) {
   var fin = {},
     mainNav = {},
     menu,
+    undersection = {},
     nextPrev = {},
     absoluteMenu = {},
     start = time.now(),
@@ -192,9 +193,37 @@ module.exports = function (options, cb) {
               if (navSectionItems.index) {
                 fin[key][navSection.url] = navSectionItems.base + '/index.html';
               }
-              else {
+
+              if (navSectionItems.dirs) {
                 Object.keys(navSectionItems.dirs).forEach(function (subNavSection) {
+                  var content,
+                      title;
+
                   fin[key][navSection.url + '/' + subNavSection] = navSectionItems.base + '/' + subNavSection + '/index.html';
+                  // undersection
+                  if (!undersection[navSection.url]) {
+                    undersection[navSection.url] = {};
+                  }
+
+                  content = fs.readFileSync(navSectionItems.base + '/' + subNavSection + '/index.html', 'utf-8');
+
+                  content = fm(content);
+
+                  if (content.attributes.title) {
+                    title = content.attributes.title;
+                  }
+                  else if (content.attributes.name) {
+                    title = content.attributes.name;
+                  }
+                  else {
+                    title = makeTitle(subNavSection);
+                  }
+
+                  undersection[navSection.url][subNavSection] = {
+                    'title': title,
+                    'description': content.attributes.description,
+                    'url': navSection.url + '/' + subNavSection
+                  }
                 });
               }
             });
@@ -227,6 +256,28 @@ module.exports = function (options, cb) {
         npPos,
         subNav,
         title,
+        us = {
+          'ag': {
+            'title': 'A - G',
+            'grouping': ['a', 'b', 'c', 'd', 'e', 'f', 'g'],
+            'children': []
+          },
+          'hn': {
+            'title': 'H - N',
+            'grouping': ['h', 'i', 'j', 'k', 'l', 'm', 'n'],
+            'children': []
+          },
+          'ot': {
+            'title': 'O - T',
+            'grouping': ['o', 'p', 'q', 'r', 's', 't'],
+            'children': []
+          },
+          'uz': {
+            'title': 'U - Z',
+            'grouping': ['u', 'v', 'w', 'x', 'y', 'z'],
+            'children': []
+          }
+        },
         render;
 
     content = fm(content);
@@ -277,6 +328,16 @@ module.exports = function (options, cb) {
       }
     }
 
+    if (undersection[outputKey]) {
+      Object.keys(undersection[outputKey]).forEach(function (usok) {
+        Object.keys(us).forEach(function (usk) {
+          if (us[usk].grouping.indexOf(usok.charAt(0)) !== -1) {
+            us[usk].children.push(undersection[outputKey][usok]);
+          }
+        });
+      });
+    }
+
 
     //////////////////////////////
     // Build pretty Subnav
@@ -318,6 +379,7 @@ module.exports = function (options, cb) {
       'navigation': {
         'main': mainNav,
         'sub': subNav,
+        'children': us,
         'active': {
           'main': key ? key.replace(/^([0-9]+\-)/g, '') : '',
           'sub': outputKey ? outputKey : ''
