@@ -288,11 +288,11 @@ module.exports = function (options, cb) {
       title += menu[key].title + ' - '
 
       if (content.attributes.name) {
-        pageTemplate = content.attributes.name;
+        pageTitle = content.attributes.name;
         title += pageTitle;
       }
       else if (content.attributes.title) {
-        pageTemplate = content.attributes.title;
+        pageTitle = content.attributes.title;
         title += pageTitle;
       }
       else {
@@ -301,7 +301,7 @@ module.exports = function (options, cb) {
       }
     }
     else {
-      pageTemplate = '';
+      pageTitle = '';
       title = '';
     }
 
