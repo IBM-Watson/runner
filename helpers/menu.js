@@ -382,7 +382,7 @@ module.exports = function (options, cb) {
         'content': content.body,
       },
       'main': {
-        'title': pageTemplate
+        'title': pageTitle
       },
       'navigation': {
         'main': mainNav,
