@@ -250,6 +250,7 @@ module.exports = function (options, cb) {
     var templatePath = 'library/templates/',
         title = ' | ',
         pageTemplate,
+        pageTitle = '',
         next,
         prev,
         npLength,
@@ -287,16 +288,20 @@ module.exports = function (options, cb) {
       title += menu[key].title + ' - '
 
       if (content.attributes.name) {
-        title += content.attributes.name;
+        pageTemplate = content.attributes.name;
+        title += pageTitle;
       }
       else if (content.attributes.title) {
-        title += content.attributes.title;
+        pageTemplate = content.attributes.title;
+        title += pageTitle;
       }
       else {
+        pageTitle = '';
         title = '';
       }
     }
     else {
+      pageTemplate = '';
       title = '';
     }
 
@@ -375,6 +380,9 @@ module.exports = function (options, cb) {
       'layout': {
         'title': title,
         'content': content.body,
+      },
+      'main': {
+        'title': pageTemplate
       },
       'navigation': {
         'main': mainNav,
