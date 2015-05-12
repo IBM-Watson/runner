@@ -272,6 +272,7 @@ module.exports = function (options, cb) {
         npLength,
         npPos,
         subNav,
+        flatSubNav = false,
         subNavFinal = {},
         title,
         us = {
@@ -401,9 +402,9 @@ module.exports = function (options, cb) {
       });
     }
 
-    // if (subNavFinal !== {}) {
-      // inspect(subNavFinal);
-    // }
+    if (subNavFinal[Object.keys(subNavFinal)[0]] && !subNavFinal[Object.keys(subNavFinal)[0]].subnav) {
+      flatSubNav = true;
+    }
 
     render = swig.compileFile(pageTemplate)({
       'layout': {
@@ -416,6 +417,7 @@ module.exports = function (options, cb) {
       'navigation': {
         'main': mainNav,
         'sub': subNavFinal,
+        'flatsub': flatSubNav,
         'children': us,
         'active': {
           'main': key ? cleanNumbers(key) : '',
