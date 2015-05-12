@@ -15,6 +15,10 @@ var base = process.cwd() + '/tmp';
 
 var site = yaml.safeLoad(fs.readFileSync('./library/config/site.yaml', 'utf-8'));
 
+fs.outputFile('www/CNAME', site.url, function (err) {
+  if (err) throw err;
+});
+
 //////////////////////////////
 // Get a list of directories
 //////////////////////////////
