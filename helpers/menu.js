@@ -23,6 +23,19 @@ var makeTitle = function makeTitle (string) {
   return _s.titleize(_s.humanize(string)).replace('Ui ', 'UI ').replace(' Url', ' URL').replace('Input ', 'Input - ').replace(/^([0-9]+\s)/g, '');
 }
 
+var cleanNumbers = function cleanNumbers (string) {
+  return string.replace(/^([0-9]+\-)/g, '');
+}
+
+var cleanURLs = function cleanURLs (url) {
+  var finalUrl = [];
+  url.split('/').forEach(function (prts) {
+    finalUrl.push(cleanNumbers(prts));
+  });
+
+  return finalUrl.join('/');
+}
+
 var processDirs = function processDirs (files, base) {
   var results = {
     'dirs': {},
@@ -84,11 +97,11 @@ var writeRedirectIndex = function writeRedirectIndex(redirect, title) {
   }
 
   url.forEach(function (urlp) {
-    urlPrts.push(urlp.replace(/^([0-9]+\-)/g, ''));
+    urlPrts.push(cleanNumbers(urlp));
   });
 
   redirect.split('/').forEach(function (redirp) {
-    redirPrts.push(redirp.replace(/^([0-9]+\-)/g, ''));
+    redirPrts.push(cleanNumbers(redirp));
   });
 
   url = urlPrts.join('/');
@@ -139,7 +152,7 @@ module.exports = function (options, cb) {
       fin[dir] = {};
 
       dir.split('/').forEach(function (dirPrt) {
-        mainNavBuild.push(dirPrt.replace(/^([0-9]+\-)/g, ''));
+        mainNavBuild.push(cleanNumbers(dirPrt));
       });
 
       mainNav[dir] = {
@@ -176,7 +189,10 @@ module.exports = function (options, cb) {
             menuItem.url = '/' + key + '/' + section + '/' + subsection;
 
             subnav.push(menuItem);
-            nextPrev[key][menuItem.url] = menuItem;
+
+            if (menuItem.url !== '/ui-patterns/patterns/base' && menuItem.url !== '/ui-patterns/patterns/components') {
+              nextPrev[key][menuItem.url] = menuItem;
+            }
           });
 
           if (subnav.length) {
@@ -256,6 +272,7 @@ module.exports = function (options, cb) {
         npLength,
         npPos,
         subNav,
+        subNavFinal = {},
         title,
         us = {
           'ag': {
@@ -349,32 +366,44 @@ module.exports = function (options, cb) {
     //////////////////////////////
     if (subNav) {
       Object.keys(subNav).forEach(function (subnavItem, j) {
-        var miholder = [];
+        var miholder;
         if (subNav[subnavItem].url) {
-          subNav[subnavItem].url.split('/').forEach(function (mi) {
-            miholder.push(mi.replace(/^([0-9]+\-)/g, ''));
-          });
+
+          miholder = cleanURLs(subNav[subnavItem].url);
+
           if (j === 0) {
-            absoluteMenu[key.replace(/^([0-9]+\-)/g, '')] = miholder.join('/');
+            absoluteMenu[cleanNumbers(key)] = miholder;
           }
-          subNav[subnavItem].url = miholder.join('/');
-          miholder = [];
+
+          subNavFinal[cleanNumbers(subnavItem)] = {
+            'title': subNav[subnavItem].title,
+            'url': miholder
+          }
         }
         else if (subNav[subnavItem].subnav) {
           subNav[subnavItem].subnav.forEach(function (sna, k) {
-            sna.url.split('/').forEach(function (mi) {
-              miholder.push(mi.replace(/^([0-9]+\-)/g, ''));
-            });
+
+            miholder = cleanURLs(sna.url);
+
             if (j === 0 && k === 0) {
-              absoluteMenu[key.replace(/^([0-9]+\-)/g, '')] = miholder.join('/');
+              absoluteMenu[cleanNumbers(key)] = miholder;
             }
-            sna.url = miholder.join('/');
-            subNav[subnavItem].subnav[k] = sna;
-            miholder = [];
+            sna.url = miholder;
+
+            if (!subNavFinal[cleanNumbers(subnavItem)]) {
+              subNavFinal[cleanNumbers(subnavItem)] = {};
+              subNavFinal[cleanNumbers(subnavItem)].title = subNav[subnavItem].title;
+              subNavFinal[cleanNumbers(subnavItem)].subnav = [];
+            }
+            subNavFinal[cleanNumbers(subnavItem)].subnav[k] = sna;
           });
         }
       });
     }
+
+    // if (subNavFinal !== {}) {
+      // inspect(subNavFinal);
+    // }
 
     render = swig.compileFile(pageTemplate)({
       'layout': {
@@ -386,10 +415,10 @@ module.exports = function (options, cb) {
       },
       'navigation': {
         'main': mainNav,
-        'sub': subNav,
+        'sub': subNavFinal,
         'children': us,
         'active': {
-          'main': key ? key.replace(/^([0-9]+\-)/g, '') : '',
+          'main': key ? cleanNumbers(key) : '',
           'sub': outputKey ? outputKey : ''
         },
         'next': next,
@@ -417,13 +446,7 @@ module.exports = function (options, cb) {
     fs.readFile(fin[key][renderKey], 'utf-8', function (err, content) {
       if (err) throw err;
 
-      renderKey.split('/').forEach(function (rk) {
-        outputKey.push(rk.replace(/^([0-9]+\-)/g, ''));
-      });
-
-      outputKey = outputKey.join('/');
-
-      fs.outputFile(process.cwd() + '/www' + outputKey + '/index.html', contentBuild(content, key, outputKey, renderKey), function (err) {
+      fs.outputFile(process.cwd() + '/www' + cleanURLs(renderKey) + '/index.html', contentBuild(content, key, cleanURLs(renderKey), renderKey), function (err) {
         if (err) throw err;
 
         // gutil.log('Wrote ' + gutil.colors.magenta(renderKey.substring(1)) + ' with title ' + gutil.colors.cyan(layout.title.substring(3)));
