@@ -338,11 +338,17 @@ module.exports = function (options, cb) {
       if (npPos !== 0) {
         prev = Object.keys(nextPrev[key])[npPos - 1];
         prev = nextPrev[key][prev];
+        if (prev) {
+          prev.url = cleanURLs(prev.url);
+        }
       }
 
       if (npPos !== npLength - 1) {
         next = Object.keys(nextPrev[key])[npPos + 1];
         next = nextPrev[key][next]
+        if (next) {
+          next.url = cleanURLs(next.url);
+        }
       }
 
       if (npPos === -1) {
