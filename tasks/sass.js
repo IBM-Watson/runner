@@ -9,6 +9,8 @@ var gutil = require('gulp-util'),
     fs = require('fs-extra'),
     ifElse = require('gulp-if-else'),
     importOnce = require('node-sass-import-once'),
+    inline_base64 = require('gulp-css-base64'),
+    autoprefixer = require('gulp-autoprefixer'),
     dest = require('../helpers/relative-dest');
 
 //////////////////////////////
@@ -74,6 +76,17 @@ module.exports = function (gulp, sassPaths) {
       .pipe(sass(sassSettings))
       .pipe(rename(function (path) {
         path.dirname = '..';
+      }))
+      .pipe(inline_base64({
+        'baseDir': './www',
+        'maxWeightResource': 13 * 1024,
+        'extensionsAllowed': [
+          '.svg',
+          '.woff'
+        ]
+      }))
+      .pipe(autoprefixer({
+        cascade: false
       }))
       .pipe(dest('./www/css/'));
   });

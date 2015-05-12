@@ -20,7 +20,9 @@ module.exports = function (gulp) {
       ['lint', 'sass:fix-libsass'],
 
       // Pre-Compiled Files
-      ['sass', 'swig', 'language', 'imagemin', 'copy', 'assets'],
+      ['swig', 'language', 'imagemin', 'copy', 'assets'],
+      // Sass needs to go after these so base64 assets can base64
+      ['sass'],
 
       // Post-Compiled Files
       ['css', 'page-build'],
