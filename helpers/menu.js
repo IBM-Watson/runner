@@ -7,10 +7,13 @@ var fs = require('fs-extra'),
     swig = require('./swig.js'),
     time = require('microtime'),
     glob = require('glob'),
+    yaml = require('js-yaml'),
     htmlmin = require('html-minifier').minify,
     _s = require('underscore.string');
 
 var base = process.cwd() + '/tmp';
+
+var site = yaml.safeLoad(fs.readFileSync('./library/config/site.yaml', 'utf-8'));
 
 //////////////////////////////
 // Get a list of directories
@@ -432,7 +435,8 @@ module.exports = function (options, cb) {
         'next': next,
         'previous': prev
       },
-      'resources': content.attributes.resources
+      'resources': content.attributes.resources,
+      'site': site
     });
 
     return htmlmin(render, {
