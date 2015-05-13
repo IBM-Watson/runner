@@ -16,7 +16,8 @@ var toCopy = [
   'language/videos/**',
   'library/assets/**',
   'library/videos/**',
-  'library/fonts/**'
+  'library/fonts/**',
+  'language/index.html'
 ];
 
 //////////////////////////////

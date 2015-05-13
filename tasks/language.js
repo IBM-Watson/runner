@@ -15,6 +15,7 @@ var gutil = require('gulp-util'),
 //////////////////////////////
 var toLibrary = [
   'language/**/*.md',
+  '!language/README.md',
   '!language/bower_components/**/*'
 ];
 
