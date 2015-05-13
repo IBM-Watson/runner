@@ -456,6 +456,7 @@ module.exports = function (options, cb) {
     return htmlmin(render, {
       'removeComments': true,
       'collapseWhitespace': true,
+      'conservativeCollapse': true,
       'collapseBooleanAttributes': true,
       'removeRedundantAttributes': true,
       'removeEmptyAttributes': true,
