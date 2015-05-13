@@ -283,6 +283,7 @@ module.exports = function (options, cb) {
         pageTemplate,
         pageTitle = '',
         next,
+        index = false,
         prev,
         npLength,
         npPos,
@@ -316,6 +317,10 @@ module.exports = function (options, cb) {
 
     content = fm(content);
     pageTemplate = content.attributes.pageTemplate ? content.attributes.pageTemplate : templatePath + '_layout.html';
+
+    if (!key && Object.keys(content.attributes).length === 0) {
+      index = true;
+    }
 
     if (key) {
       title += menu[key].title + ' - '
@@ -427,6 +432,7 @@ module.exports = function (options, cb) {
       'layout': {
         'title': title,
         'content': content.body,
+        'index': index
       },
       'main': {
         'title': pageTitle
