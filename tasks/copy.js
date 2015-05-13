@@ -16,8 +16,7 @@ var toCopy = [
   'language/videos/**',
   'library/assets/**',
   'library/videos/**',
-  'library/fonts/**',
-  'language/index.html'
+  'library/fonts/**'
 ];
 
 //////////////////////////////
@@ -41,6 +40,16 @@ module.exports = function (gulp, CopyPaths) {
   //////////////////////////////
   gulp.task('copy', function () {
     return CopyTask(CopyPaths);
+  });
+
+  gulp.task('copy:index', function () {
+    return gulp.src('language/index.html')
+      .pipe(dest('./tmp'))
+      .pipe(reload({stream: true}));
+  });
+
+  gulp.task('copy:index:watch', function () {
+    return gulp.watch('language/index.html', ['copy:index']);
   });
 
   //////////////////////////////
