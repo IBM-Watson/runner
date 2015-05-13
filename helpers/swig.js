@@ -118,6 +118,11 @@ swig.setFilter('fileExtension', function (file) {
   return getFileExtension(file);
 });
 
+swig.setFilter('mp4', function (file) {
+  file = file.replace('.' + getFileExtension(file), '.mp4');
+  return file;
+});
+
 swig.setFilter('fileType', function (file) {
   var ext = getFileExtension(file);
   if (ext !== 'webm' && ext !== 'mp4') {
