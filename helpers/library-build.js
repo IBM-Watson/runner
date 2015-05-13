@@ -97,7 +97,14 @@ module.exports = function (options) {
     renderedPage = frontmatter + '<div class="base--STYLED">\n' + renderedPage + '</div>';
 
     file.contents = new Buffer(renderedPage);
-    file.path = paths.folder + '/index.html';
+    // console.log(file.path);
+    if (file.path.split('/').pop() === '404.md') {
+      file.path = paths.folder + '/404.html';
+    }
+    else {
+      file.path = paths.folder + '/index.html';
+    }
+
 
     gutil.log('Page ' + gutil.colors.magenta(paths.relative) + ' compiled');
 

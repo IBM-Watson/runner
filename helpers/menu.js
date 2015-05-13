@@ -147,6 +147,14 @@ module.exports = function (options, cb) {
     });
   });
 
+  fs.readFile(process.cwd() + '/tmp/404.html', 'utf-8', function (err, content) {
+    if (err) throw err;
+
+    fs.outputFile(process.cwd() + '/www/404.html', contentBuild(content), function (err) {
+      if (err) throw err;
+    });
+  });
+
   getdirs(process.cwd() + '/tmp', function (err, dirs) {
     var key,
         mainNavBuild = [],
@@ -311,19 +319,15 @@ module.exports = function (options, cb) {
 
     if (key) {
       title += menu[key].title + ' - '
+    }
 
-      if (content.attributes.name) {
-        pageTitle = content.attributes.name;
-        title += pageTitle;
-      }
-      else if (content.attributes.title) {
-        pageTitle = content.attributes.title;
-        title += pageTitle;
-      }
-      else {
-        pageTitle = '';
-        title = '';
-      }
+    if (content.attributes.name) {
+      pageTitle = content.attributes.name;
+      title += pageTitle;
+    }
+    else if (content.attributes.title) {
+      pageTitle = content.attributes.title;
+      title += pageTitle;
     }
     else {
       pageTitle = '';
