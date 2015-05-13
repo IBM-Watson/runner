@@ -65,6 +65,9 @@ module.exports = function (gulp, sassPaths) {
       .pipe(rename(function (path) {
         path.dirname = '..';
       }))
+      .pipe(autoprefixer({
+        cascade: false
+      }))
       .pipe(dest('./www/css/'));
   };
 
