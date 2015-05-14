@@ -428,6 +428,10 @@ module.exports = function (options, cb) {
       flatSubNav = true;
     }
 
+    if (Object.keys(subNavFinal).length === 0) {
+      subNavFinal = false;
+    }
+
     render = swig.compileFile(pageTemplate)({
       'layout': {
         'title': title,
