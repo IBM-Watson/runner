@@ -5,6 +5,7 @@
 //////////////////////////////
 var swig = require('swig'),
     path = require('path'),
+    fs = require('fs-extra'),
     marked = require('./markdown'),
     fs = require('fs-extra');
 
@@ -121,6 +122,18 @@ swig.setFilter('fileExtension', function (file) {
 swig.setFilter('mp4', function (file) {
   file = file.replace('.' + getFileExtension(file), '.mp4');
   return file;
+});
+
+swig.setFilter('smallerVideo', function (file) {
+  var webm = fs.statSync('./language' + file);
+  var mp4 = fs.statSync('./language' + file.replace('.' + getFileExtension(file), '.mp4'));
+
+  if (webm.size < mp4.size) {
+    return 'webm';
+  }
+  else {
+    return 'mp4';
+  }
 });
 
 swig.setFilter('fileType', function (file) {
