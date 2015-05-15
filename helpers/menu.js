@@ -313,6 +313,7 @@ module.exports = function (options, cb) {
             'children': []
           }
         },
+        hasChildren = false,
         render;
 
     content = fm(content);
@@ -377,6 +378,7 @@ module.exports = function (options, cb) {
       Object.keys(undersection[outputKey]).forEach(function (usok) {
         Object.keys(us).forEach(function (usk) {
           if (us[usk].grouping.indexOf(usok.charAt(0)) !== -1) {
+            hasChildren = true;
             us[usk].children.push(undersection[outputKey][usok]);
           }
         });
@@ -430,6 +432,10 @@ module.exports = function (options, cb) {
 
     if (Object.keys(subNavFinal).length === 0) {
       subNavFinal = false;
+    }
+
+    if (!hasChildren) {
+      us = false;
     }
 
     render = swig.compileFile(pageTemplate)({
