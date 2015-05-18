@@ -20,7 +20,7 @@ module.exports = function (gulp) {
       ['lint', 'sass:fix-libsass'],
 
       // Pre-Compiled Files
-      ['swig', 'language', 'imagemin', 'copy', 'copy:index', 'assets'],
+      ['swig', 'language', 'imagemin', 'imagemin:patterns', 'copy', 'copy:index', 'assets'],
       // Sass needs to go after these so base64 assets can base64
       ['sass'],
 
@@ -41,7 +41,7 @@ module.exports = function (gulp) {
       ['lint:server', 'sass:fix-libsass'],
 
       // Pre-Compiled Files
-      ['sass:server', 'swig:server', 'language', 'imagemin', 'copy', 'copy:index', 'assets'],
+      ['sass:server', 'swig:server', 'language', 'imagemin', 'imagemin:patterns', 'copy', 'copy:index', 'assets'],
 
       // Post-Compiled Files
       ['css', 'page-build'],
