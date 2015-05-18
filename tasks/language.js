@@ -30,7 +30,7 @@ module.exports = function (gulp, LibraryPaths) {
   // Encapsulate task in function to choose path to work on
   //////////////////////////////
   var LibraryTask = function (path) {
-    return gulp.src(LibraryPaths)
+    return gulp.src(path)
       .pipe(front({ property: 'meta' }))
       .pipe(swig())
       .pipe(dest('./tmp/'));
