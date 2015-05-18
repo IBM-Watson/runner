@@ -7,6 +7,7 @@ var gutil = require('gulp-util'),
     imagemin = require('gulp-imagemin'),
     pngquant = require('imagemin-pngquant'),
     browserSync = require('browser-sync'),
+    dest = require('../helpers/relative-dest'),
     reload = browserSync.reload;
 
 //////////////////////////////
@@ -16,6 +17,15 @@ var toImagemin = [
   'language/images/**/*',
   'library/images/**/*'
 ];
+
+var imageminSettings = {
+  progressive: true,
+  svgoPlugins:[
+    { 'removeViewBox': false },
+    { 'removeUselessDefs': false }
+  ],
+  use: [pngquant()]
+};
 
 //////////////////////////////
 // Export
@@ -28,13 +38,16 @@ module.exports = function (gulp, ImageminPaths) {
   // Encapsulate task in function to choose path to work on
   //////////////////////////////
   var ImageminTask = function (path) {
-    return gulp.src(ImageminPaths)
-      .pipe(imagemin({
-        progressive: true,
-        svgoPlugins:[{removeViewBox: false}],
-        use: [pngquant()]
-      }))
-      .pipe(gulp.dest('www/images'))
+    return gulp.src(path)
+      .pipe(imagemin(imageminSettings))
+      .pipe(dest('www'))
+      .pipe(reload({stream: true}));
+  }
+
+  var ImageminPatternTask = function (path) {
+    return gulp.src(path)
+      .pipe(imagemin(imageminSettings))
+      .pipe(dest('www/ui-patterns/patterns'))
       .pipe(reload({stream: true}));
   }
 
@@ -43,6 +56,10 @@ module.exports = function (gulp, ImageminPaths) {
   //////////////////////////////
   gulp.task('imagemin', function () {
     return ImageminTask(ImageminPaths);
+  });
+
+  gulp.task('imagemin:patterns', function () {
+    return ImageminPatternTask('patterns/**/images/*');
   });
 
   //////////////////////////////
@@ -62,6 +79,23 @@ module.exports = function (gulp, ImageminPaths) {
 
         // Call the task
         return ImageminTask(event.path.absolute);
+      });
+  });
+
+  gulp.task('imagemin:patterns:watch', function () {
+    return gulp.watch('patterns/**/images/*')
+      .on('change', function (event) {
+        // Add absolute and relative (to Gulpfile) paths
+        event.path = {
+          absolute: event.path,
+          relative: event.path.replace(__dirname.replace('/tasks', '') + '/', '')
+        }
+
+        // Notify user of the change
+        gutil.log('File ' + gutil.colors.magenta(event.path.relative) + ' was ' + event.type);
+
+        // Call the task
+        return ImageminPatternTask(event.path.absolute);
       });
   });
 }
