@@ -31,7 +31,7 @@ module.exports = function (gulp, CopyPaths) {
   //////////////////////////////
   var CopyTask = function (path) {
     return gulp.src(CopyPaths)
-      .pipe(dest('./www'))
+      .pipe(dest('./.www'))
       .pipe(reload({stream: true}));
   }
 
@@ -44,7 +44,7 @@ module.exports = function (gulp, CopyPaths) {
 
   gulp.task('copy:index', function () {
     return gulp.src('language/index.html')
-      .pipe(dest('./tmp'))
+      .pipe(dest('./.tmp'))
       .pipe(reload({stream: true}));
   });
 

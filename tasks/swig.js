@@ -36,7 +36,7 @@ module.exports = function (gulp, SwigPaths) {
       .pipe(rename(function (path) {
         path.basename = 'index';
       }))
-      .pipe(dest('./tmp/ui-patterns/patterns'));
+      .pipe(dest('./.tmp/ui-patterns/patterns'));
       // .pipe(reload({stream: true}));
   }
 

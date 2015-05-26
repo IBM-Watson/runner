@@ -15,7 +15,7 @@ var gutil = require('gulp-util'),
 // Internal Vars
 //////////////////////////////
 var toPageBuild = [
-  'tmp/**/*.html'
+  '.tmp/**/*.html'
 ];
 
 //////////////////////////////

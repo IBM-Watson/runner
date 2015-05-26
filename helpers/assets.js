@@ -66,7 +66,7 @@ module.exports = function (options) {
           jsFiles[key] = jsFiles[key].code;
         }
 
-        fs.outputFileSync('www/js/' + key + '.min.js', jsFiles[key]);
+        fs.outputFileSync('.www/js/' + key + '.min.js', jsFiles[key]);
         gutil.log('Wrote ' + gutil.colors.magenta(key + '.min.js'));
       });
     }

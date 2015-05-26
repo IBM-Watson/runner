@@ -40,14 +40,14 @@ module.exports = function (gulp, ImageminPaths) {
   var ImageminTask = function (path) {
     return gulp.src(path)
       .pipe(imagemin(imageminSettings))
-      .pipe(dest('www'))
+      .pipe(dest('.www'))
       .pipe(reload({stream: true}));
   }
 
   var ImageminPatternTask = function (path) {
     return gulp.src(path)
       .pipe(imagemin(imageminSettings))
-      .pipe(dest('www/ui-patterns/patterns'))
+      .pipe(dest('.www/ui-patterns/patterns'))
       .pipe(reload({stream: true}));
   }
 
