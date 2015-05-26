@@ -22,7 +22,8 @@ var imageminSettings = {
   progressive: true,
   svgoPlugins:[
     { 'removeViewBox': false },
-    { 'removeUselessDefs': false }
+    { 'removeUselessDefs': false },
+    { 'convertTransform': false }
   ],
   use: [pngquant()]
 };
