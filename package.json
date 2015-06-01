@@ -47,9 +47,5 @@
     "uglifyjs": "^2.4.10",
     "underscore.string": "^3.0.3",
     "walk": "^2.3.9"
-  },
-  "peerDependencies": {
-    "bower": "^1.4.1",
-    "gulp": "^3.8.10"
   }
 }
