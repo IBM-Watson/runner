@@ -28,12 +28,12 @@ renderer.image = function (href, title, text) {
 
 
   // YouTube Embed
-  if (uri.hostname() === 'www.youtube.com') {
+  if (uri.hostname() === '.www.youtube.com') {
     if (title) {
       out += '<div class="video--' + title + '">';
     }
 
-    out += '<iframe width="560" height="315" src="//www.youtube.com/embed/' + uri.query().substring(2) + '" frameborder="0" allowfullscreen></iframe>';
+    out += '<iframe width="560" height="315" src="//.www.youtube.com/embed/' + uri.query().substring(2) + '" frameborder="0" allowfullscreen></iframe>';
 
     if (title) {
       out += '</div>';

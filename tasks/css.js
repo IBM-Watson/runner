@@ -12,7 +12,7 @@ var gutil = require('gulp-util'),
 // Internal Vars
 //////////////////////////////
 var toCss = [
-  'www/**/*.css'
+  '.www/**/*.css'
 ];
 
 //////////////////////////////
@@ -28,7 +28,7 @@ module.exports = function (gulp, CssPaths) {
   var CssTask = function (path) {
     return gulp.src(CssPaths)
       // .pipe(target({
-        // base: 'www/css'
+        // base: '.www/css'
       // }))
       .pipe(reload({stream: true}));
   }

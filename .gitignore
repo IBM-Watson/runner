@@ -4,10 +4,12 @@ patterns/
 library/
 language/
 www/
+.www/
 css/
 fonts/
 images/
 js/
 vendor/
 tmp/
+.tmp/
 .sass-cache/

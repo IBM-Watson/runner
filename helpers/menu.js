@@ -11,11 +11,11 @@ var fs = require('fs-extra'),
     htmlmin = require('html-minifier').minify,
     _s = require('underscore.string');
 
-var base = process.cwd() + '/tmp';
+var base = process.cwd() + '/.tmp';
 
 var site = yaml.safeLoad(fs.readFileSync('./library/config/site.yaml', 'utf-8'));
 
-fs.outputFile('www/CNAME', site.url, function (err) {
+fs.outputFile('.www/CNAME', site.url, function (err) {
   if (err) throw err;
 });
 
@@ -117,7 +117,7 @@ var writeRedirectIndex = function writeRedirectIndex(redirect, title) {
   refreshIndex = refreshIndex.replace(/\{\{redirect\}\}/g, redirect);
   refreshIndex = refreshIndex.replace(/\{\{title\}\}/g, title);
 
-  fs.outputFile(process.cwd() + '/www/' + url + '/index.html', refreshIndex, function (err) {
+  fs.outputFile(process.cwd() + '/.www/' + url + '/index.html', refreshIndex, function (err) {
     if (err) throw err;
     // gutil.log('Wrote ' + gutil.colors.magenta(url) + ' to redirect ' + gutil.colors.cyan(title));
   });
@@ -136,26 +136,26 @@ module.exports = function (options, cb) {
     end;
 
   // fin['index'] = {
-  //   'index': process.cwd() + '/tmp/index.html'
+  //   'index': process.cwd() + '/.tmp/index.html'
   // };
 
-  fs.readFile(process.cwd() + '/tmp/index.html', 'utf-8', function (err, content) {
+  fs.readFile(process.cwd() + '/.tmp/index.html', 'utf-8', function (err, content) {
     if (err) throw err;
 
-    fs.outputFile(process.cwd() + '/www/index.html', contentBuild(content), function (err) {
+    fs.outputFile(process.cwd() + '/.www/index.html', contentBuild(content), function (err) {
       if (err) throw err;
     });
   });
 
-  fs.readFile(process.cwd() + '/tmp/404.html', 'utf-8', function (err, content) {
+  fs.readFile(process.cwd() + '/.tmp/404.html', 'utf-8', function (err, content) {
     if (err) throw err;
 
-    fs.outputFile(process.cwd() + '/www/404.html', contentBuild(content), function (err) {
+    fs.outputFile(process.cwd() + '/.www/404.html', contentBuild(content), function (err) {
       if (err) throw err;
     });
   });
 
-  getdirs(process.cwd() + '/tmp', function (err, dirs) {
+  getdirs(process.cwd() + '/.tmp', function (err, dirs) {
     var key,
         mainNavBuild = [],
         index = false,
@@ -483,7 +483,7 @@ module.exports = function (options, cb) {
     fs.readFile(fin[key][renderKey], 'utf-8', function (err, content) {
       if (err) throw err;
 
-      fs.outputFile(process.cwd() + '/www' + cleanURLs(renderKey) + '/index.html', contentBuild(content, key, cleanURLs(renderKey), renderKey), function (err) {
+      fs.outputFile(process.cwd() + '/.www' + cleanURLs(renderKey) + '/index.html', contentBuild(content, key, cleanURLs(renderKey), renderKey), function (err) {
         if (err) throw err;
 
         // gutil.log('Wrote ' + gutil.colors.magenta(renderKey.substring(1)) + ' with title ' + gutil.colors.cyan(layout.title.substring(3)));
@@ -494,7 +494,7 @@ module.exports = function (options, cb) {
           delete fin[key];
 
           if (Object.keys(fin).length === 0) {
-            glob(process.cwd() + '/www/**/*.html', function (err, files) {
+            glob(process.cwd() + '/.www/**/*.html', function (err, files) {
               var fileCount = files.length,
                   fi;
               files.forEach(function (file) {

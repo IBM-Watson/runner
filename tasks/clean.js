@@ -15,10 +15,10 @@ module.exports = function (gulp) {
   //////////////////////////////
   gulp.task('clean:server', function (cb) {
     return clean([
-      'www/**/*',
-      '!www/.gitkeep',
-      '!www/CNAME',
-      'tmp/'
+      '.www/**/*',
+      '!.www/.gitkeep',
+      '!.www/CNAME',
+      '.tmp/'
     ], cb);
   });
 }

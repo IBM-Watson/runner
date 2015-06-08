@@ -170,7 +170,7 @@ var buildMenuJSON = function (directory, extensions, all, cb) {
 var loadSections = function loadSections () {
   var sections = [];
   var walked = walker.transformSync({
-    root: process.cwd() + '/tmp/',
+    root: process.cwd() + '/.tmp/',
     rules: {
       '**/*.html': '$1'
     }

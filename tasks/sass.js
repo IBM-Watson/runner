@@ -68,7 +68,7 @@ module.exports = function (gulp, sassPaths) {
       .pipe(autoprefixer({
         cascade: false
       }))
-      .pipe(dest('./www/css/'));
+      .pipe(dest('./.www/css/'));
   };
 
   //////////////////////////////
@@ -81,7 +81,7 @@ module.exports = function (gulp, sassPaths) {
         path.dirname = '..';
       }))
       .pipe(inline_base64({
-        'baseDir': './www',
+        'baseDir': './.www',
         'maxWeightResource': 13 * 1024,
         'extensionsAllowed': [
           '.svg',
@@ -91,7 +91,7 @@ module.exports = function (gulp, sassPaths) {
       .pipe(autoprefixer({
         cascade: false
       }))
-      .pipe(dest('./www/css/'));
+      .pipe(dest('./.www/css/'));
   });
 
   //////////////////////////////

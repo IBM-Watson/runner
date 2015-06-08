@@ -11,7 +11,7 @@ var gutil = require('gulp-util'),
 // Internal Vars
 //////////////////////////////
 var toServer = [
-  './www/'
+  './.www/'
 ];
 
 //////////////////////////////

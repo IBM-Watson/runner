@@ -33,7 +33,7 @@ module.exports = function (gulp, LibraryPaths) {
     return gulp.src(path)
       .pipe(front({ property: 'meta' }))
       .pipe(swig())
-      .pipe(dest('./tmp/'));
+      .pipe(dest('./.tmp/'));
       // .pipe(reload({stream: true}));
   }
 
