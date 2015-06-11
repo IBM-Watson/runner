@@ -291,6 +291,7 @@ module.exports = function (options, cb) {
         flatSubNav = false,
         subNavFinal = {},
         title,
+        activeSub = outputKey ? outputKey : '',
         us = {
           'ag': {
             'title': 'A - G',
@@ -438,6 +439,16 @@ module.exports = function (options, cb) {
       us = false;
     }
 
+    // Find the parent of sub pages
+    if (outputKey) {
+      if (outputKey.split('/').length === 5) {
+        activeSub = outputKey.split('/');
+        activeSub.pop();
+        activeSub = activeSub.join('/');
+      }
+    }
+
+
     render = swig.compileFile(pageTemplate)({
       'layout': {
         'title': title,
@@ -454,7 +465,7 @@ module.exports = function (options, cb) {
         'children': us,
         'active': {
           'main': key ? cleanNumbers(key) : '',
-          'sub': outputKey ? outputKey : ''
+          'sub': activeSub
         },
         'next': next,
         'previous': prev
