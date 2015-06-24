@@ -14,7 +14,7 @@ var gutil = require('gulp-util'),
 // Internal Vars
 //////////////////////////////
 var toAssets = [
-  'library/config/**.yaml'
+  'site/config/**.yaml'
 ];
 
 //////////////////////////////

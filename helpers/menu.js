@@ -13,7 +13,7 @@ var fs = require('fs-extra'),
 
 var base = process.cwd() + '/.tmp';
 
-var site = yaml.safeLoad(fs.readFileSync('./library/config/site.yaml', 'utf-8'));
+var site = yaml.safeLoad(fs.readFileSync('./site/config/site.yaml', 'utf-8'));
 
 fs.outputFile('.www/CNAME', site.url, function (err) {
   if (err) throw err;
@@ -278,7 +278,7 @@ module.exports = function (options, cb) {
   });
 
   var contentBuild = function contentBuild (content, key, outputKey, renderKey) {
-    var templatePath = 'library/templates/',
+    var templatePath = 'site/templates/',
         title = ' | ',
         pageTemplate,
         pageTitle = '',

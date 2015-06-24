@@ -15,7 +15,7 @@ var gutil = require('gulp-util'),
 //////////////////////////////
 var toImagemin = [
   'language/images/**/*',
-  'library/images/**/*'
+  'site/images/**/*'
 ];
 
 var imageminSettings = {

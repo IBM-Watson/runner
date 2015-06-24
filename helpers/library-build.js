@@ -22,12 +22,12 @@ var through = require('through2'),
 //////////////////////////////
 // Set up subcontent imports
 //////////////////////////////
-var subcontent = fs.readdirSync('library/templates/subcontent'),
+var subcontent = fs.readdirSync('site/templates/subcontent'),
     scImport = '';
 
 subcontent.forEach(function (file) {
   var macroName = path.basename(file, path.extname(file));
-  scImport += '{% import "' + process.cwd() + '/library/templates/subcontent/' + file + '" as ' + macroName + ' %}\n';
+  scImport += '{% import "' + process.cwd() + '/site/templates/subcontent/' + file + '" as ' + macroName + ' %}\n';
 });
 
 //////////////////////////////

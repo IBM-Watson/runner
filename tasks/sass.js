@@ -19,11 +19,11 @@ var gutil = require('gulp-util'),
 var toWatch = [
   'patterns/**/*.scss',
   'patterns/**/*.sass',
-  'library/sass/**/*.scss',
-  'library/sass/**/*.sass'
+  'site/sass/**/*.scss',
+  'site/sass/**/*.sass'
 ];
 
-var toSass = process.cwd() + '/library/sass/style.scss';
+var toSass = process.cwd() + '/site/sass/style.scss';
 
 var sassSettings = {
   'outputStyle': 'compressed',
