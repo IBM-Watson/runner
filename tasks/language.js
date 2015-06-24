@@ -14,9 +14,9 @@ var gutil = require('gulp-util'),
 // Internal Vars
 //////////////////////////////
 var toLibrary = [
-  'language/**/*.md',
-  '!language/README.md',
-  '!language/bower_components/**/*'
+  'guides/**/*.md',
+  '!guides/README.md',
+  '!guides/bower_components/**/*'
 ];
 
 //////////////////////////////

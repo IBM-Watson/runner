@@ -125,8 +125,8 @@ swig.setFilter('mp4', function (file) {
 });
 
 swig.setFilter('smallerVideo', function (file) {
-  var webm = fs.statSync('./language' + file);
-  var mp4 = fs.statSync('./language' + file.replace('.' + getFileExtension(file), '.mp4'));
+  var webm = fs.statSync('./guides' + file);
+  var mp4 = fs.statSync('./guides' + file.replace('.' + getFileExtension(file), '.mp4'));
 
   if (webm.size < mp4.size) {
     return 'webm';

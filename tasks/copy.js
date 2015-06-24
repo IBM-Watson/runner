@@ -12,8 +12,8 @@ var gutil = require('gulp-util'),
 // Internal Vars
 //////////////////////////////
 var toCopy = [
-  'language/assets/**',
-  'language/videos/**',
+  'guides/assets/**',
+  'guides/videos/**',
   'site/assets/**',
   'site/videos/**',
   'site/fonts/**'
@@ -43,13 +43,13 @@ module.exports = function (gulp, CopyPaths) {
   });
 
   gulp.task('copy:index', function () {
-    return gulp.src('language/index.html')
+    return gulp.src('guides/index.html')
       .pipe(dest('./.tmp'))
       .pipe(reload({stream: true}));
   });
 
   gulp.task('copy:index:watch', function () {
-    return gulp.watch('language/index.html', ['copy:index']);
+    return gulp.watch('guides/index.html', ['copy:index']);
   });
 
   //////////////////////////////
